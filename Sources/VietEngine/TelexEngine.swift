@@ -252,7 +252,11 @@ public final class TelexEngine {
     private func render() -> String {
         // Từ tiếng Anh có chữ đôi (Larry, coffee, array, error…): phím dấu bị huỷ mà từ không phải
         // tiếng Việt thì giữ nguyên các phím đã gõ. Từ ngắn (≤ 2 chữ, như "ass" → "as") vẫn theo Telex.
-        if droppedUndo, letters.count >= 3, !Syllable.isValid(letters, tone: tone) { return String(typed) }
+        // Riêng "rr" vừa gõ xong: chưa biết sau đó là phụ âm (bỏ dấu: "serr" → "ser") hay nguyên âm ("Larry"),
+        // nên tạm hiện kiểu Telex (một chữ r) để màn hình không nhấp nháy "serr" rồi lại "ser".
+        let n = typed.count
+        let pendingRR = n >= 2 && typed[n - 1].lowercased() == "r" && typed[n - 2].lowercased() == "r"
+        if droppedUndo, !pendingRR, letters.count >= 3, !Syllable.isValid(letters, tone: tone) { return String(typed) }
         let transformed = tone != .none || letters.contains { $0.mark != .none }
         if !transformed { return compose(tonePos: nil) }
         guard Syllable.isValid(letters, tone: tone) else { return String(raw) }

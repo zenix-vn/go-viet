@@ -9,6 +9,10 @@ final class OutputSender {
 
     private let kVKDelete: CGKeyCode = 51
     private let kVKLeft: CGKeyCode = 123
+    /// Mã phím dùng cho ký tự Unicode giả lập. Không dùng mã 0 (phím A): khi gõ nhanh, phím A thật có thể chưa nhả
+    /// lúc ta gửi "à", và Chromium/Electron bỏ qua keyDown trùng mã với một phím đang được coi là đang giữ.
+    /// Dùng phím dấu huyền (`), gần như không bao giờ bị giữ khi gõ chữ.
+    private let kVKCarrier: CGKeyCode = 50
 
     /// Gọi đồng bộ trong callback của event tap để giữ đúng thứ tự phím.
     func send(delete: Int, insert: String, strategy: SendStrategy, delayMs: Int, proxy: CGEventTapProxy) {
@@ -44,7 +48,7 @@ final class OutputSender {
 
     private func type(_ units: [UniChar], _ proxy: CGEventTapProxy, _ delayUs: UInt32) {
         for down in [true, false] {
-            guard let e = CGEvent(keyboardEventSource: source, virtualKey: 0, keyDown: down) else { continue }
+            guard let e = CGEvent(keyboardEventSource: source, virtualKey: kVKCarrier, keyDown: down) else { continue }
             e.flags = []
             units.withUnsafeBufferPointer { e.keyboardSetUnicodeString(stringLength: units.count, unicodeString: $0.baseAddress) }
             e.setIntegerValueField(.eventSourceUserData, value: Self.magic)

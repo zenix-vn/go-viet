@@ -21,6 +21,10 @@ enum Syllable {
         "iêu", "yêu", "oai", "oay", "oeo", "uây", "uôi", "ươi", "ươu", "uyê", "uyu", "uêu",
     ]
 
+    // Vần đang gõ dở (chưa gõ dấu mũ/móc): "uo" sắp thành "uô/ươ", "ie" sắp thành "iê"...
+    // Chỉ hợp lệ khi chưa có dấu thanh, để chữ trên màn hình không nhảy qua lại giữa chữ gốc và chữ có dấu.
+    static let partialNuclei: Set<String> = ["uo", "ie", "ye", "uye", "uoi", "ieu", "yeu", "uyeu", "uou"]
+
     static func parse(_ ls: [Letter]) -> ParsedSyllable {
         let n = ls.count
         var i = 0
@@ -47,7 +51,7 @@ enum Syllable {
             return p.nucleusEnd == ls.count && tone == .none
         }
         let nucleus = text(ls[p.initialEnd..<p.nucleusEnd])
-        guard nuclei.contains(nucleus) else { return false }
+        guard nuclei.contains(nucleus) || (tone == .none && partialNuclei.contains(nucleus)) else { return false }
         let fin = text(ls[p.nucleusEnd..<ls.count])
         guard finals.contains(fin) else { return false }
 

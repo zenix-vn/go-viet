@@ -63,6 +63,8 @@ check("khoer", "khỏe"); check("khoer", "khoẻ", modern: true)
 check("hoaj", "họa"); check("hoaj", "hoạ", modern: true)
 check("mias", "mía", modern: true); check("cuar", "của", modern: true)
 
+check("dduowcj", "được"); check("dduocwj", "được"); check("dduwowcj", "được"); check("ddieeuf", "điều")
+
 // Dấu gõ tự do (thanh trước, mũ sau)
 check("tieesng", "tiếng"); check("tiengse", "tiếng")
 check("hoanf", "hoàn"); check("hoafn", "hoàn")

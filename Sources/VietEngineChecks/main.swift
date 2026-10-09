@@ -1,0 +1,94 @@
+import Foundation
+import VietEngine
+
+/// Mô phỏng màn hình: gõ lần lượt từng ký tự, áp dụng kết quả của engine.
+func type(_ keys: String, modern: Bool = false, wToU: Bool = true) -> String {
+    let engine = TelexEngine(options: EngineOptions(modernTone: modern, wToU: wToU))
+    var screen: [Character] = []
+    for ch in keys {
+        if ch == "\u{8}" {                      // Backspace
+            engine.handleBackspace()
+            if !screen.isEmpty { screen.removeLast() }
+        } else if ch.isASCII && ch.isLetter {
+            switch engine.handleLetter(ch) {
+            case .passThrough: screen.append(ch)
+            case .replace(let d, let ins):
+                screen.removeLast(d)
+                screen.append(contentsOf: ins)
+            }
+        } else {
+            engine.reset()
+            screen.append(ch)
+        }
+    }
+    return String(screen)
+}
+
+var failed = 0
+var total = 0
+func check(_ keys: String, _ expected: String, modern: Bool = false, wToU: Bool = true) {
+    total += 1
+    let got = type(keys, modern: modern, wToU: wToU)
+    if got != expected {
+        failed += 1
+        let shown = keys.replacingOccurrences(of: "\u{8}", with: "<BS>")
+        print("FAIL  \(shown)  →  \(got)   (mong đợi \(expected), modern=\(modern))")
+    }
+}
+
+// Thanh và dấu mũ cơ bản
+check("as", "á"); check("af", "à"); check("ar", "ả"); check("ax", "ã"); check("aj", "ạ")
+check("aa", "â"); check("ee", "ê"); check("oo", "ô"); check("aw", "ă"); check("ow", "ơ"); check("uw", "ư")
+check("dd", "đ"); check("DD", "Đ"); check("Dd", "Đ")
+check("asz", "a")
+
+// Từ thông dụng
+check("nguowif", "người"); check("nguwowif", "người"); check("tieengs", "tiếng")
+check("Vieetj", "Việt"); check("Nam", "Nam"); check("truowngf", "trường"); check("Truowngf", "Trường")
+check("quoocs", "quốc"); check("gias", "giá"); check("gif", "gì"); check("ddaayf", "đầy")
+check("DDaau", "Đâu"); check("ddi", "đi"); check("did", "đi")
+check("toans", "toán"); check("hoanf", "hoàn"); check("khuyeens", "khuyến")
+check("chuyeenj", "chuyện"); check("ngoaif", "ngoài"); check("muwaf", "mừa"); check("duwowngj", "dượng")
+check("nhuwngx", "những"); check("chaof", "chào"); check("cuar", "của"); check("mias", "mía")
+check("thanhf", "thành"); check("hocj", "học"); check("khoong", "không")
+check("giuwx", "giữ"); check("giuwxf", "giừ"); check("ghes", "ghé"); check("kys", "ký")
+check("ngheej", "nghệ"); check("hocj", "học"); check("quyeenf", "quyền"); check("ddieeuf", "điều")
+check("yeeus", "yếu"); check("uoongs", "uống"); check("buoonf", "buồn")
+check("ddoongs", "đống"); check("nguyeenx", "nguyễn"); check("Hoafng", "Hoàng")
+
+// Kiểu đặt dấu cũ / mới
+check("hoaf", "hòa"); check("hoaf", "hoà", modern: true)
+check("thuys", "thúy"); check("thuys", "thuý", modern: true)
+check("khoer", "khỏe"); check("khoer", "khoẻ", modern: true)
+check("hoaj", "họa"); check("hoaj", "hoạ", modern: true)
+check("mias", "mía", modern: true); check("cuar", "của", modern: true)
+
+// Dấu gõ tự do (thanh trước, mũ sau)
+check("tieesng", "tiếng"); check("tiengse", "tiếng")
+check("hoanf", "hoàn"); check("hoafn", "hoàn")
+
+// Gõ hai lần để huỷ dấu
+check("ass", "as"); check("aaa", "aa"); check("ddd", "dd"); check("ooo", "oo"); check("aww", "aw")
+check("ww", "w"); check("asss", "ass")
+
+// Từ không phải tiếng Việt phải giữ nguyên
+check("text", "text"); check("class", "class"); check("windows", "windows"); check("Xcode", "Xcode")
+check("fix", "fix"); check("next", "next"); check("world", "world"); check("swift", "swift")
+check("github", "github"); check("email", "email"); check("service", "service")
+check("w", "ư"); check("w", "w", wToU: false); check("nw", "nư")
+
+// Chữ hoa
+check("Ow", "Ơ"); check("OW", "Ơ"); check("TIEENGS", "TIẾNG"); check("NGUOWIF", "NGƯỜI")
+
+// Dấu câu và khoảng trắng kết thúc từ
+check("tieengs Vieetj.", "tiếng Việt."); check("xin chaof, ", "xin chào, ")
+check("as as", "á á"); check("hello1as", "hello1á")
+
+// Backspace
+check("tieengs\u{8}", "tiến"); check("tieengs\u{8}g", "tiếng")
+check("hoaf\u{8}", "hò"); check("hoafn\u{8}n", "hoàn")
+check("a\u{8}s", "s"); check("tieengs\u{8}\u{8}\u{8}", "ti")
+check("Vieetj\u{8}ts", "Viết"); check("Vieetj\u{8}\u{8}ts", "Vít")
+
+print(failed == 0 ? "OK: \(total)/\(total) ca kiểm thử đạt" : "THẤT BẠI: \(failed)/\(total)")
+exit(failed == 0 ? 0 : 1)

@@ -48,12 +48,16 @@ public final class TelexEngine {
         displayed.removeAll(keepingCapacity: true)
         typed.removeAll(keepingCapacity: true)
         droppedUndo = false
+        justDropped = false
         tone = .none
     }
 
     // MARK: - Phím
 
     /// `ch` phải là một chữ cái ASCII a-z hoặc A-Z.
+    /// Phím vừa xử lý đã "ăn" một phím dấu trước đó (lần huỷ dấu xảy ra đúng ở phím này).
+    private var justDropped = false
+
     /// Phím đang xử lý đến sau một quãng dừng (người dùng nhìn màn hình rồi mới bấm).
     private var afterPause = false
 
@@ -62,16 +66,20 @@ public final class TelexEngine {
     /// bấm liền tay là chữ đôi tiếng Anh ("pass", "password", "offset") nên giữ nguyên phím đã gõ.
     public func handleLetter(_ ch: Character, afterPause: Bool = false) -> EngineOutput {
         self.afterPause = afterPause
+        let prevDropped = justDropped
+        justDropped = false
         // Không có từ tiếng Việt nào dài thế này (thường là giữ phím lặp): bắt đầu từ mới để bộ đệm không phình ra.
         if typed.count >= 32 { reset() }
         raw.append(ch)
         typed.append(ch)
-        // "rr" rồi phụ âm (s-e-r-r-v-e-r): tiếng Anh gần như không có, đây là người dùng bấm r lần nữa
-        // để bỏ dấu hỏi vừa hiện ra. Giữ kiểu Telex (một chữ r), không khôi phục nguyên phím đã gõ.
+        // Phím dấu gõ đôi rồi phụ âm (s-e-r-r-v-e-r, p-u-s-s-h): người dùng gõ đôi để bỏ dấu theo Telex,
+        // nên giữ một chữ, không khôi phục nguyên phím đã gõ. Đánh đổi: "password", "offset" gõ liền
+        // sẽ ra "pasword", "ofset" như Telex chuẩn (gõ "passsword" để có "password").
         let n = typed.count
-        if droppedUndo, n >= 3, !"aeiouyh".contains(Character(ch.lowercased())),   // "rrh": diarrhea, myrrh
-           typed[n - 2].lowercased() == "r", typed[n - 3].lowercased() == "r" {
-            droppedUndo = false
+        if droppedUndo, prevDropped, n >= 3, isDoubledToneKey(typed[n - 3], typed[n - 2]) {
+            let next = Character(ch.lowercased())
+            let rrh = typed[n - 2].lowercased() == "r" && next == "h"   // diarrhea, myrrh
+            if !"aeiouy".contains(next) && !rrh { droppedUndo = false }
         }
         apply(key: Character(ch.lowercased()), upper: ch.isUppercase)
         let new = Array(render())
@@ -112,6 +120,7 @@ public final class TelexEngine {
 
     /// Gõ phím dấu lần hai để huỷ ("rr" → "r"): phím đầu đã bị dấu "ăn", nên chữ gốc chỉ còn một phím đó.
     private func dropUndoneKey(_ key: Character) {
+        justDropped = true
         if !afterPause { droppedUndo = true }
         let body = raw.dropLast()
         if let i = body.lastIndex(where: { Character($0.lowercased()) == key }) { raw.remove(at: i) }
@@ -259,17 +268,22 @@ public final class TelexEngine {
     private func render() -> String {
         // Từ tiếng Anh có chữ đôi (Larry, coffee, array, error…): phím dấu bị huỷ mà từ không phải
         // tiếng Việt thì giữ nguyên các phím đã gõ. Từ ngắn (≤ 2 chữ, như "ass" → "as") vẫn theo Telex.
-        // Riêng "rr" vừa gõ xong: chưa biết sau đó là phụ âm (bỏ dấu: "serr" → "ser") hay nguyên âm ("Larry"),
-        // nên tạm hiện kiểu Telex (một chữ r) để màn hình không nhấp nháy "serr" rồi lại "ser".
+        // Phím dấu vừa gõ đôi xong: chưa biết sau đó là phụ âm (bỏ dấu: "puss" → "pus") hay nguyên âm
+        // ("Larry", "assume"), nên tạm hiện kiểu Telex (một chữ) để màn hình không nhấp nháy.
         let n = typed.count
-        let pendingRR = n >= 2 && typed[n - 1].lowercased() == "r" && typed[n - 2].lowercased() == "r"
-        if droppedUndo, !pendingRR, letters.count >= 3, !Syllable.isValid(letters, tone: tone) { return String(typed) }
+        let pendingDouble = justDropped && n >= 2 && isDoubledToneKey(typed[n - 2], typed[n - 1])
+        if droppedUndo, !pendingDouble, letters.count >= 3, !Syllable.isValid(letters, tone: tone) { return String(typed) }
         let transformed = tone != .none || letters.contains { $0.mark != .none }
         if !transformed { return compose(tonePos: nil) }
         guard Syllable.isValid(letters, tone: tone) else { return String(raw) }
         let pos = Syllable.tonePosition(letters, modern: options.modernTone)
         if tone != .none && pos == nil { return String(raw) }
         return compose(tonePos: pos)
+    }
+
+    private func isDoubledToneKey(_ a: Character, _ b: Character) -> Bool {
+        let x = Character(a.lowercased())
+        return "sfrxj".contains(x) && x == Character(b.lowercased())
     }
 
     private func compose(tonePos: Int?) -> String {
@@ -298,6 +312,7 @@ public final class TelexEngine {
         raw = chars
         typed = chars
         droppedUndo = false
+        justDropped = false
         displayed = chars
     }
 }

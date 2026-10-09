@@ -24,3 +24,10 @@ Bản build ký ad-hoc: mỗi lần dựng lại, macOS có thể yêu cầu c�
 
 Trên thanh menu, chọn **Cách gửi phím ở <ứng dụng>** và thử lần lượt các cách, hoặc tăng
 **độ trễ giữa các phím** trong Cài đặt.
+
+## Gõ chữ tiếng Anh ở chế độ tiếng Việt
+
+- Từ không thể là tiếng Việt được giữ nguyên: `text`, `class`, `windows`, `coffee`, `error`, `Larry`.
+- Gõ đôi phím dấu để bỏ dấu (Telex chuẩn): `pussh` → `push`, `serrver` → `server`.
+- Vì vậy chữ đôi thật đứng trước phụ âm hoặc cuối từ cần gõ ba lần: `passsword` → `password`, `passs` → `pass`.
+- Đoạn dài tiếng Anh: bấm ⌃ Space để chuyển sang chế độ E.

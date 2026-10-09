@@ -54,7 +54,14 @@ public final class TelexEngine {
     // MARK: - Phím
 
     /// `ch` phải là một chữ cái ASCII a-z hoặc A-Z.
-    public func handleLetter(_ ch: Character) -> EngineOutput {
+    /// Phím đang xử lý đến sau một quãng dừng (người dùng nhìn màn hình rồi mới bấm).
+    private var afterPause = false
+
+    /// `afterPause`: phím này đến sau một quãng dừng rõ rệt so với phím trước (bộ gõ đo bằng thời gian sự kiện).
+    /// Bấm lại phím dấu sau quãng dừng là chủ động bỏ dấu vừa thấy ("pú" → bấm s → "pus"), nên theo Telex chuẩn;
+    /// bấm liền tay là chữ đôi tiếng Anh ("pass", "password", "offset") nên giữ nguyên phím đã gõ.
+    public func handleLetter(_ ch: Character, afterPause: Bool = false) -> EngineOutput {
+        self.afterPause = afterPause
         // Không có từ tiếng Việt nào dài thế này (thường là giữ phím lặp): bắt đầu từ mới để bộ đệm không phình ra.
         if typed.count >= 32 { reset() }
         raw.append(ch)
@@ -105,7 +112,7 @@ public final class TelexEngine {
 
     /// Gõ phím dấu lần hai để huỷ ("rr" → "r"): phím đầu đã bị dấu "ăn", nên chữ gốc chỉ còn một phím đó.
     private func dropUndoneKey(_ key: Character) {
-        droppedUndo = true
+        if !afterPause { droppedUndo = true }
         let body = raw.dropLast()
         if let i = body.lastIndex(where: { Character($0.lowercased()) == key }) { raw.remove(at: i) }
     }

@@ -19,6 +19,11 @@ final class KeyTap {
 
     var isRunning: Bool { tap != nil }
 
+    /// Thời điểm (ns) của phím chữ trước đó, để nhận ra quãng dừng trước khi bấm lại phím dấu.
+    private var lastLetterTime: CGEventTimestamp = 0
+    /// Quãng dừng tối thiểu được coi là "nhìn rồi mới bấm". Gõ liền tay thường 70–200 ms giữa hai phím.
+    private let pauseThreshold: CGEventTimestamp = 250_000_000
+
     func start() -> Bool {
         guard tap == nil else { return true }
         let types: [CGEventType] = [.keyDown, .leftMouseDown, .rightMouseDown, .otherMouseDown]
@@ -96,8 +101,11 @@ final class KeyTap {
 
         engine.options = EngineOptions(modernTone: settings.modernTone, wToU: settings.wToU)
         let before = String(engine.displayed)
-        let out = engine.handleLetter(ch)
-        DebugLog.write("\(frontBundleID ?? "?") gõ \(ch): \"\(before)\" → \"\(String(engine.displayed))\" \(out)")
+        let now = event.timestamp
+        let paused = lastLetterTime > 0 && now > lastLetterTime && now - lastLetterTime >= pauseThreshold
+        lastLetterTime = now
+        let out = engine.handleLetter(ch, afterPause: paused)
+        DebugLog.write("\(frontBundleID ?? "?") gõ \(ch): \"\(before)\" → \"\(String(engine.displayed))\" \(out)\(paused ? " (sau quãng dừng)" : "")")
         switch out {
         case .passThrough:
             return pass

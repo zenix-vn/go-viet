@@ -5,12 +5,15 @@ import VietEngine
 func type(_ keys: String, modern: Bool = false, wToU: Bool = true) -> String {
     let engine = TelexEngine(options: EngineOptions(modernTone: modern, wToU: wToU))
     var screen: [Character] = []
+    var pause = false
     for ch in keys {
+        if ch == "|" { pause = true; continue }      // "|": dừng tay trước phím tiếp theo
+        defer { pause = false }
         if ch == "\u{8}" {                      // Backspace
             engine.handleBackspace()
             if !screen.isEmpty { screen.removeLast() }
         } else if ch.isASCII && ch.isLetter {
-            switch engine.handleLetter(ch) {
+            switch engine.handleLetter(ch, afterPause: pause) {
             case .passThrough: screen.append(ch)
             case .replace(let d, let ins):
                 screen.removeLast(d)
@@ -85,7 +88,9 @@ check("ass", "as"); check("off", "of"); check("per", "pẻ")
 // Từ tiếng Anh có chữ đôi giữ nguyên như đã gõ
 check("error", "error"); check("Larry", "Larry"); check("array", "array"); check("coffee", "coffee")
 check("offer", "offer"); check("assume", "assume"); check("less", "less"); check("pass", "pass")
-check("class", "class"); check("Serrver", "Server"); check("serrver", "server"); check("Serrvice", "Service"); check("worrd", "word"); check("access", "access"); check("address", "address")
+check("class", "class"); check("Serrver", "Server"); check("pus|sh", "push"); check("pussh", "pussh"); check("pas|s", "pas"); check("password", "password")
+check("offset", "offset"); check("pass", "pass"); check("less", "less"); check("of|fset", "ofset"); check("Ser|rver", "Server")
+check("Lar|ry", "Lary"); check("serrver", "server"); check("Serrvice", "Service"); check("worrd", "word"); check("access", "access"); check("address", "address")
 check("assess", "assess"); check("hello", "hello"); check("current", "current"); check("mirror", "mirror")
 check("keeper", "keeper"); check("berseem", "berseem"); check("nongrooming", "nongrooming"); check("authorize", "authorize"); check("size", "size"); check("unfrozen", "unfrozen"); check("Saxonize", "Saxonize"); check("wordd", "wordd"); check("Larrry", "Larry"); check("Larrr", "Larr")
 

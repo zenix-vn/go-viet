@@ -1,7 +1,6 @@
 import SwiftUI
 import ServiceManagement
 import UniformTypeIdentifiers
-import VietEngine
 
 /// Dùng ObservableObject thay cho @State: Command Line Tools không có plugin macro của SwiftUI.
 final class LaunchAtLogin: ObservableObject {

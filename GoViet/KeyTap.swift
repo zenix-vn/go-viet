@@ -1,6 +1,5 @@
 import Cocoa
 import Carbon
-import VietEngine
 
 /// Chặn phím toàn hệ thống, chạy engine, và gửi chữ đã sửa ra ứng dụng.
 /// Mọi xử lý diễn ra đồng bộ trong callback (trên luồng chính) để không bao giờ đảo thứ tự phím.

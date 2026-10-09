@@ -1,6 +1,5 @@
 import Cocoa
 import SwiftUI
-import VietEngine
 
 final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWindowDelegate {
     private let settings = AppSettings.shared

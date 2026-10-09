@@ -1,5 +1,4 @@
 import Cocoa
-import VietEngine
 
 /// Lịch sử clipboard (chỉ lưu trong bộ nhớ, mất khi thoát app) và chuyển mã nội dung clipboard.
 final class ClipboardManager: NSObject {

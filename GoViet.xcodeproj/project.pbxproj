@@ -1,0 +1,471 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		002790119FADD57206D64644 /* DebugLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCAD96210550BC3E8E9D1F85 /* DebugLog.swift */; };
+		0774B3EA694F010266E45800 /* TextConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5910234531A8680C90AC68F /* TextConverter.swift */; };
+		09B23926EA347828334CF365 /* PermissionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 576E20717144718B6DCE0F59 /* PermissionView.swift */; };
+		262A972B956B91A713A7EDE3 /* OutputSender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 310A62DFD3CD6894F3A716D9 /* OutputSender.swift */; };
+		2E32EDCD88DD878A0119A013 /* Syllable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17C0C318C7C007A4B1D1759D /* Syllable.swift */; };
+		3FA6F419A65E20498C9EE214 /* TelexEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF92459FC1606C288D70FCFD /* TelexEngine.swift */; };
+		4C7A3110F0C9EF2F5E2E5B39 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1157F93BE3671691DCA2593 /* SettingsView.swift */; };
+		61953E3C0141D38422E1A6F3 /* CharTables.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4020614AFE14FCB482AC177 /* CharTables.swift */; };
+		6B0D5707BD5669C043338574 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8EE4DE82AA59B51124F5BED /* AppDelegate.swift */; };
+		86E8CEFC68C42982956CA11C /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35F8B02A2BB507C6E2F2DE1C /* AppSettings.swift */; };
+		86F27504EE2FC574DAA8C6E0 /* EngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFCB375831E197B043383BAA /* EngineTests.swift */; };
+		B25A0F5051C5F4BF7D15D84F /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98E6EFF388BC0646AB83EC59 /* main.swift */; };
+		BCC74A5CF655BA0A9AE765D8 /* TextConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5910234531A8680C90AC68F /* TextConverter.swift */; };
+		CBD19ABA1C4F411A0FBD7C4C /* TelexEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF92459FC1606C288D70FCFD /* TelexEngine.swift */; };
+		D14A64350D1A604DF695744E /* Syllable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17C0C318C7C007A4B1D1759D /* Syllable.swift */; };
+		D89B7954EC7D47CE5DA0E424 /* CharTables.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4020614AFE14FCB482AC177 /* CharTables.swift */; };
+		DE5E9A4C0EEF57069D134CD2 /* FocusZone.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7AB1DFCA2DB0D047AF59C28 /* FocusZone.swift */; };
+		DFC491A4A3612CDDECAE47AB /* ClipboardManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37F87A206F050E12F882C6AC /* ClipboardManager.swift */; };
+		E8F22FC9AB1476D6C3CE3271 /* KeyTap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0491D645BC7D5D4426FD0BA4 /* KeyTap.swift */; };
+		EFCB8BE96081CA59A60909E8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A0A7B4533886D2EAFB546891 /* Assets.xcassets */; };
+		F6118D514EE66C8FCF3D8041 /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF9AC3F7DDA603FA9A9D930C /* AboutView.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		0491D645BC7D5D4426FD0BA4 /* KeyTap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyTap.swift; sourceTree = "<group>"; };
+		17C0C318C7C007A4B1D1759D /* Syllable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Syllable.swift; sourceTree = "<group>"; };
+		1D33468F16BE860C7DC80C92 /* GoVietTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GoVietTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		310A62DFD3CD6894F3A716D9 /* OutputSender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutputSender.swift; sourceTree = "<group>"; };
+		35F8B02A2BB507C6E2F2DE1C /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
+		37F87A206F050E12F882C6AC /* ClipboardManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipboardManager.swift; sourceTree = "<group>"; };
+		576E20717144718B6DCE0F59 /* PermissionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionView.swift; sourceTree = "<group>"; };
+		64FD9387A1A3C29BA1E2FAA3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		98E6EFF388BC0646AB83EC59 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		A0A7B4533886D2EAFB546891 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		A7AB1DFCA2DB0D047AF59C28 /* FocusZone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusZone.swift; sourceTree = "<group>"; };
+		B4020614AFE14FCB482AC177 /* CharTables.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharTables.swift; sourceTree = "<group>"; };
+		BF92459FC1606C288D70FCFD /* TelexEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TelexEngine.swift; sourceTree = "<group>"; };
+		BF9AC3F7DDA603FA9A9D930C /* AboutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
+		C8EE4DE82AA59B51124F5BED /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		DCAD96210550BC3E8E9D1F85 /* DebugLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugLog.swift; sourceTree = "<group>"; };
+		E24001BA3C9DF392802DA816 /* GoViet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GoViet.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F1157F93BE3671691DCA2593 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		F5910234531A8680C90AC68F /* TextConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextConverter.swift; sourceTree = "<group>"; };
+		FFCB375831E197B043383BAA /* EngineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EngineTests.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		968B7653E34D10132C8723D3 /* GoViet */ = {
+			isa = PBXGroup;
+			children = (
+				BF9AC3F7DDA603FA9A9D930C /* AboutView.swift */,
+				C8EE4DE82AA59B51124F5BED /* AppDelegate.swift */,
+				35F8B02A2BB507C6E2F2DE1C /* AppSettings.swift */,
+				A0A7B4533886D2EAFB546891 /* Assets.xcassets */,
+				37F87A206F050E12F882C6AC /* ClipboardManager.swift */,
+				DCAD96210550BC3E8E9D1F85 /* DebugLog.swift */,
+				A7AB1DFCA2DB0D047AF59C28 /* FocusZone.swift */,
+				64FD9387A1A3C29BA1E2FAA3 /* Info.plist */,
+				0491D645BC7D5D4426FD0BA4 /* KeyTap.swift */,
+				98E6EFF388BC0646AB83EC59 /* main.swift */,
+				310A62DFD3CD6894F3A716D9 /* OutputSender.swift */,
+				576E20717144718B6DCE0F59 /* PermissionView.swift */,
+				F1157F93BE3671691DCA2593 /* SettingsView.swift */,
+				A58962D9D90F221C0184CF5B /* Engine */,
+			);
+			path = GoViet;
+			sourceTree = "<group>";
+		};
+		A58962D9D90F221C0184CF5B /* Engine */ = {
+			isa = PBXGroup;
+			children = (
+				B4020614AFE14FCB482AC177 /* CharTables.swift */,
+				17C0C318C7C007A4B1D1759D /* Syllable.swift */,
+				BF92459FC1606C288D70FCFD /* TelexEngine.swift */,
+				F5910234531A8680C90AC68F /* TextConverter.swift */,
+			);
+			path = Engine;
+			sourceTree = "<group>";
+		};
+		A7C9EEA834A6B44463C98688 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				E24001BA3C9DF392802DA816 /* GoViet.app */,
+				1D33468F16BE860C7DC80C92 /* GoVietTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		AD1798A05D3D3EC43DC5AA31 = {
+			isa = PBXGroup;
+			children = (
+				968B7653E34D10132C8723D3 /* GoViet */,
+				CF29B34CA8CC85583247A97C /* GoVietTests */,
+				A7C9EEA834A6B44463C98688 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		CF29B34CA8CC85583247A97C /* GoVietTests */ = {
+			isa = PBXGroup;
+			children = (
+				FFCB375831E197B043383BAA /* EngineTests.swift */,
+			);
+			path = GoVietTests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		80686C4CC55FBC0DEC7FAC04 /* GoVietTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B9014210FA259F4D9F2B747C /* Build configuration list for PBXNativeTarget "GoVietTests" */;
+			buildPhases = (
+				7B3BB013D6E142A6013ADB9F /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = GoVietTests;
+			packageProductDependencies = (
+			);
+			productName = GoVietTests;
+			productReference = 1D33468F16BE860C7DC80C92 /* GoVietTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		911006D999B97AA06A341F01 /* GoViet */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AE03DDD799A7C653AB6D09FB /* Build configuration list for PBXNativeTarget "GoViet" */;
+			buildPhases = (
+				77C6B7AFC9A351F19E62AA56 /* Sources */,
+				A03E4311ADDE5BF8C7B37903 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = GoViet;
+			packageProductDependencies = (
+			);
+			productName = GoViet;
+			productReference = E24001BA3C9DF392802DA816 /* GoViet.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		292BFB31E5108EA062392E85 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					80686C4CC55FBC0DEC7FAC04 = {
+						ProvisioningStyle = Manual;
+					};
+					911006D999B97AA06A341F01 = {
+						ProvisioningStyle = Manual;
+					};
+				};
+			};
+			buildConfigurationList = 8C046D7337BEDB9B7DD76027 /* Build configuration list for PBXProject "GoViet" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = AD1798A05D3D3EC43DC5AA31;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = A7C9EEA834A6B44463C98688 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				911006D999B97AA06A341F01 /* GoViet */,
+				80686C4CC55FBC0DEC7FAC04 /* GoVietTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		A03E4311ADDE5BF8C7B37903 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EFCB8BE96081CA59A60909E8 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		77C6B7AFC9A351F19E62AA56 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F6118D514EE66C8FCF3D8041 /* AboutView.swift in Sources */,
+				6B0D5707BD5669C043338574 /* AppDelegate.swift in Sources */,
+				86E8CEFC68C42982956CA11C /* AppSettings.swift in Sources */,
+				61953E3C0141D38422E1A6F3 /* CharTables.swift in Sources */,
+				DFC491A4A3612CDDECAE47AB /* ClipboardManager.swift in Sources */,
+				002790119FADD57206D64644 /* DebugLog.swift in Sources */,
+				DE5E9A4C0EEF57069D134CD2 /* FocusZone.swift in Sources */,
+				E8F22FC9AB1476D6C3CE3271 /* KeyTap.swift in Sources */,
+				262A972B956B91A713A7EDE3 /* OutputSender.swift in Sources */,
+				09B23926EA347828334CF365 /* PermissionView.swift in Sources */,
+				4C7A3110F0C9EF2F5E2E5B39 /* SettingsView.swift in Sources */,
+				D14A64350D1A604DF695744E /* Syllable.swift in Sources */,
+				CBD19ABA1C4F411A0FBD7C4C /* TelexEngine.swift in Sources */,
+				BCC74A5CF655BA0A9AE765D8 /* TextConverter.swift in Sources */,
+				B25A0F5051C5F4BF7D15D84F /* main.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7B3BB013D6E142A6013ADB9F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D89B7954EC7D47CE5DA0E424 /* CharTables.swift in Sources */,
+				86F27504EE2FC574DAA8C6E0 /* EngineTests.swift in Sources */,
+				2E32EDCD88DD878A0119A013 /* Syllable.swift in Sources */,
+				3FA6F419A65E20498C9EE214 /* TelexEngine.swift in Sources */,
+				0774B3EA694F010266E45800 /* TextConverter.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		76FA60970AB0FC08A73DCCD7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_HARDENED_RUNTIME = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = vn.goviet.GoVietTests;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		AA9FEE456CA350027A0260A9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				"DEVELOPMENT_TEAM[sdk=macosx*]" = A759U6QWJ9;
+				INFOPLIST_FILE = GoViet/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				OTHER_CODE_SIGN_FLAGS = "-r=\"designated => identifier \\\"vn.goviet.GoViet\\\"\"";
+				PRODUCT_BUNDLE_IDENTIFIER = vn.goviet.GoViet;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		CF39BD25694A3D1AF09065C8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Manual;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MARKETING_VERSION = 0.1.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.9;
+			};
+			name = Release;
+		};
+		D5938E46B486B7E33094CC88 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Manual;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MARKETING_VERSION = 0.1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.9;
+			};
+			name = Debug;
+		};
+		EF5379D4ED0D7B809B0EB492 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_HARDENED_RUNTIME = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = vn.goviet.GoVietTests;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		F9ADB51F6D91BD30F3F2F158 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				"DEVELOPMENT_TEAM[sdk=macosx*]" = A759U6QWJ9;
+				INFOPLIST_FILE = GoViet/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				OTHER_CODE_SIGN_FLAGS = "-r=\"designated => identifier \\\"vn.goviet.GoViet\\\"\"";
+				PRODUCT_BUNDLE_IDENTIFIER = vn.goviet.GoViet;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		8C046D7337BEDB9B7DD76027 /* Build configuration list for PBXProject "GoViet" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D5938E46B486B7E33094CC88 /* Debug */,
+				CF39BD25694A3D1AF09065C8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		AE03DDD799A7C653AB6D09FB /* Build configuration list for PBXNativeTarget "GoViet" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AA9FEE456CA350027A0260A9 /* Debug */,
+				F9ADB51F6D91BD30F3F2F158 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		B9014210FA259F4D9F2B747C /* Build configuration list for PBXNativeTarget "GoVietTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EF5379D4ED0D7B809B0EB492 /* Debug */,
+				76FA60970AB0FC08A73DCCD7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 292BFB31E5108EA062392E85 /* Project object */;
+}

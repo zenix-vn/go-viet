@@ -7,7 +7,9 @@ Không gạch chân, không lặp chữ. Thiết kế chi tiết: [docs/DESIGN.m
 ## Dựng và cài
 
 ```sh
-swift run VietEngineChecks      # kiểm thử engine
+open GoViet.xcodeproj            # mở bằng Xcode (scheme GoViet / VietEngineChecks)
+swift run VietEngineChecks      # kiểm thử engine (SwiftPM, tuỳ chọn)
+xcodegen generate               # sinh lại GoViet.xcodeproj từ project.yml sau khi thêm/bớt file
 Tools/build_app.sh --install    # dựng và chép vào /Applications
 ```
 

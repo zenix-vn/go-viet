@@ -88,7 +88,7 @@ check("ass", "as"); check("off", "of"); check("per", "pẻ")
 // Từ tiếng Anh có chữ đôi giữ nguyên như đã gõ
 check("error", "error"); check("Larry", "Larry"); check("array", "array"); check("coffee", "coffee")
 check("offer", "offer"); check("assume", "assume"); check("less", "les"); check("pass", "pas")
-check("class", "class"); check("Serrver", "Server"); check("pus|sh", "push"); check("pussh", "push"); check("Pussh", "Push"); check("passsword", "password")
+check("class", "class"); check("luwoif", "lười"); check("dduwocj", "được"); check("nguwoif", "người"); check("thuwong", "thương"); check("muwowif", "mười"); check("uwo", "ưo"); check("PUSSH", "PUSH"); check("SERRVER", "SERVER"); check("downward", "downward"); check("Warwick", "Warwick"); check("waxwing", "waxwing"); check("hertz", "hertz"); check("quartz", "quartz"); check("hocjz", "hoc"); check("buaw", "bưa"); check("chuawx", "chữa"); check("cuuws", "cứu"); check("huuw", "hưu"); check("quawn", "quăn"); check("hoawcs", "hoắc"); check("muwa", "mưa"); check("buawf", "bừa"); check("chuaww", "chuaw"); check("wweb", "web"); check("wwindows", "windows"); check("Wweb", "Web"); check("keeep", "keep"); check("booot", "boot"); check("Serrver", "Server"); check("pus|sh", "push"); check("pussh", "push"); check("Pussh", "Push"); check("passsword", "password")
 check("password", "pasword"); check("offset", "ofset"); check("passs", "pass"); check("Ser|rver", "Server")
 check("Lar|ry", "Lary"); check("serrver", "server"); check("Serrvice", "Service"); check("worrd", "word"); check("access", "access"); check("address", "address")
 check("assess", "assess"); check("hello", "hello"); check("current", "current"); check("mirror", "mirror")

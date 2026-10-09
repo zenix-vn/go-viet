@@ -76,7 +76,7 @@ public final class TelexEngine {
         // nên giữ một chữ, không khôi phục nguyên phím đã gõ. Đánh đổi: "password", "offset" gõ liền
         // sẽ ra "pasword", "ofset" như Telex chuẩn (gõ "passsword" để có "password").
         let n = typed.count
-        if droppedUndo, prevDropped, n >= 3, isDoubledToneKey(typed[n - 3], typed[n - 2]) {
+        if droppedUndo, prevDropped, n >= 3, isUndoRun(endingAt: n - 2) {
             let next = Character(ch.lowercased())
             let rrh = typed[n - 2].lowercased() == "r" && next == "h"   // diarrhea, myrrh
             if !"aeiouy".contains(next) && !rrh { droppedUndo = false }
@@ -121,7 +121,11 @@ public final class TelexEngine {
     /// Gõ phím dấu lần hai để huỷ ("rr" → "r"): phím đầu đã bị dấu "ăn", nên chữ gốc chỉ còn một phím đó.
     private func dropUndoneKey(_ key: Character) {
         justDropped = true
-        if !afterPause { droppedUndo = true }
+        // Gõ liền "ww" là cách Telex gõ chữ w thường ("wweb" → "web"); tiếng Anh không có "ww" nên không cần
+        // giữ nguyên. Hai chữ w cách nhau ("downward", "Warwick") vẫn là từ tiếng Anh, giữ nguyên như đã gõ.
+        let n = typed.count
+        let adjacentWW = key == "w" && n >= 2 && typed[n - 2].lowercased() == "w"
+        if !afterPause && !adjacentWW { droppedUndo = true }
         let body = raw.dropLast()
         if let i = body.lastIndex(where: { Character($0.lowercased()) == key }) { raw.remove(at: i) }
     }
@@ -155,6 +159,8 @@ public final class TelexEngine {
 
         case "z":
             if tone != .none {
+                // Từ đang hiện nguyên chữ gốc (không phải tiếng Việt): z là chữ thường ("hertz", "quartz")
+                if showingRaw { return restoreRaw() }
                 tone = .none
                 droppedUndo = true   // z đã "ăn" phím dấu trước đó (authorize, size…)
             } else {
@@ -231,28 +237,36 @@ public final class TelexEngine {
             return
         }
 
-        // a → ă, o → ơ, u → ư
-        if let idx = group.last(where: { i in
+        // a → ă, o → ơ, u → ư. Thử từ chữ cuối nhóm về đầu, chọn chữ cho ra âm tiết hợp lệ:
+        // "buaw" → "bưa" (không phải "buă"), "cuuw" → "cưu".
+        let candidates = group.reversed().filter { i in
             let b = letters[i].base
             return b == "a" || b == "o" || (b == "u" && !afterQ(i))
-        }) {
-            let want: Mark = letters[idx].base == "a" ? .breve : .horn
-            if letters[idx].mark == want {
-                if showingRaw {
-                    undone.insert("w")
-                    return restoreRaw()
-                }
-                dropUndoneKey("w")
-                if letters[idx].fromW {
-                    letters[idx] = Letter(base: "w", upper: letters[idx].upper)
-                } else {
-                    letters[idx].mark = .none
-                    literal("w", upper)
-                }
+        }
+        func want(_ i: Int) -> Mark { letters[i].base == "a" ? .breve : .horn }
+        if let idx = candidates.first(where: { letters[$0].mark == want($0) }) {
+            // Đã có dấu móc/trăng: w lần nữa là bỏ dấu
+            if showingRaw {
                 undone.insert("w")
-            } else {
-                letters[idx].mark = want
+                return restoreRaw()
             }
+            dropUndoneKey("w")
+            if letters[idx].fromW {
+                letters[idx] = Letter(base: "w", upper: letters[idx].upper)
+            } else {
+                letters[idx].mark = .none
+                literal("w", upper)
+            }
+            undone.insert("w")
+            return
+        }
+        if let first = candidates.first {
+            let pick = candidates.first(where: { i in
+                var trial = letters
+                trial[i].mark = want(i)
+                return Syllable.isValid(trial, tone: tone)
+            }) ?? first
+            letters[pick].mark = want(pick)
             return
         }
 
@@ -271,22 +285,41 @@ public final class TelexEngine {
         // Phím dấu vừa gõ đôi xong: chưa biết sau đó là phụ âm (bỏ dấu: "puss" → "pus") hay nguyên âm
         // ("Larry", "assume"), nên tạm hiện kiểu Telex (một chữ) để màn hình không nhấp nháy.
         let n = typed.count
-        let pendingDouble = justDropped && n >= 2 && isDoubledToneKey(typed[n - 2], typed[n - 1])
+        let pendingDouble = justDropped && isUndoRun(endingAt: n - 1)
         if droppedUndo, !pendingDouble, letters.count >= 3, !Syllable.isValid(letters, tone: tone) { return String(typed) }
         let transformed = tone != .none || letters.contains { $0.mark != .none }
-        if !transformed { return compose(tonePos: nil) }
-        guard Syllable.isValid(letters, tone: tone) else { return String(raw) }
-        let pos = Syllable.tonePosition(letters, modern: options.modernTone)
+        if !transformed { return compose(letters, tonePos: nil) }
+        let ls = completingUoHorn(letters)
+        guard Syllable.isValid(ls, tone: tone) else { return String(raw) }
+        let pos = Syllable.tonePosition(ls, modern: options.modernTone)
         if tone != .none && pos == nil { return String(raw) }
-        return compose(tonePos: pos)
+        return compose(ls, tonePos: pos)
     }
 
-    private func isDoubledToneKey(_ a: Character, _ b: Character) -> Bool {
-        let x = Character(a.lowercased())
-        return "sfrxj".contains(x) && x == Character(b.lowercased())
+    /// Các phím ngay trước `end` (tính cả nó) là kiểu gõ lặp để bỏ dấu của Telex:
+    /// phím thanh và w gõ đôi ("ss", "rr", "ww"); dấu mũ và đ gõ ba ("eee", "ooo", "ddd").
+    /// Gõ đôi "ee", "oo" thì không tính: đó là dấu mũ, hoặc chữ đôi tiếng Anh như "berseem".
+    private func isUndoRun(endingAt end: Int) -> Bool {
+        guard end >= 1 else { return false }
+        let x = Character(typed[end].lowercased())
+        let need: Int
+        if "sfrxjw".contains(x) { need = 2 } else if "aeod".contains(x) { need = 3 } else { return false }
+        guard end - need + 1 >= 0 else { return false }
+        return (end - need + 1...end).allSatisfy { Character(typed[$0].lowercased()) == x }
     }
 
-    private func compose(tonePos: Int?) -> String {
+    /// "ưo" mà sau đó còn chữ hoặc đã có dấu thanh thì chắc chắn là "ươ" ("dduwocj" → "được",
+    /// "luwoif" → "lười"), như Unikey/OpenKey. "ưo" đứng cuối chưa có thanh thì để nguyên (đang gõ dở).
+    private func completingUoHorn(_ ls: [Letter]) -> [Letter] {
+        var ls = ls
+        for i in 0..<max(ls.count - 1, 0) where ls[i].base == "u" && ls[i].mark == .horn
+            && ls[i + 1].base == "o" && ls[i + 1].mark == .none && (i + 2 < ls.count || tone != .none) {
+            ls[i + 1].mark = .horn
+        }
+        return ls
+    }
+
+    private func compose(_ letters: [Letter], tonePos: Int?) -> String {
         var out = ""
         for (i, l) in letters.enumerated() {
             let c = Glyphs.glyph(base: l.base, mark: l.mark, tone: i == tonePos ? tone : .none)

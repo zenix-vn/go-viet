@@ -1,5 +1,7 @@
 import SwiftUI
 import ServiceManagement
+import UniformTypeIdentifiers
+import VietEngine
 
 /// Dùng ObservableObject thay cho @State: Command Line Tools không có plugin macro của SwiftUI.
 final class LaunchAtLogin: ObservableObject {
@@ -67,6 +69,12 @@ struct SettingsView: View {
             Text("Gõ từ viết tắt rồi dấu cách hoặc dấu câu để thay bằng cụm đầy đủ. \"vn\" → \"Việt Nam\"; gõ \"VN\" ra \"VIỆT NAM\", \"Vn\" ra \"Việt Nam\".")
                 .font(.caption).foregroundStyle(.secondary)
             HStack {
+                Button("Nhập từ file…", action: importMacros)
+                Button("Xuất ra file…", action: exportMacros).disabled(settings.macros.isEmpty)
+                Spacer()
+                Text("\(settings.macros.count) mục").foregroundStyle(.secondary)
+            }
+            HStack {
                 TextField("Viết tắt", text: $draft.key).frame(width: 110)
                 TextField("Cụm đầy đủ", text: $draft.value)
                 Button("Thêm", action: addMacro)
@@ -88,6 +96,46 @@ struct SettingsView: View {
                 }
             }
         }
+    }
+
+    private func exportMacros() {
+        let panel = NSSavePanel()
+        panel.nameFieldStringValue = "go-tat.json"
+        panel.allowedContentTypes = [.json]
+        guard panel.runModal() == .OK, let url = panel.url else { return }
+        do {
+            try MacroFile.export(settings.macros).write(to: url, options: .atomic)
+        } catch {
+            alert("Không ghi được file", error.localizedDescription)
+        }
+    }
+
+    private func importMacros() {
+        let panel = NSOpenPanel()
+        panel.allowedContentTypes = [.json, .plainText, .commaSeparatedText, .tabSeparatedText]
+        guard panel.runModal() == .OK, let url = panel.url else { return }
+        guard let data = try? Data(contentsOf: url), data.count < 5_000_000 else {
+            alert("Không đọc được file", "File không tồn tại hoặc quá lớn.")
+            return
+        }
+        let result = MacroFile.parse(data)
+        let replaced = result.macros.keys.filter { settings.macros[$0] != nil && settings.macros[$0] != result.macros[$0] }.count
+        settings.macros.merge(result.macros) { _, new in new }
+        var info = "Đã nhập \(result.macros.count) mục"
+        if replaced > 0 { info += " (ghi đè \(replaced) mục trùng viết tắt)" }
+        info += "."
+        if !result.skipped.isEmpty {
+            info += "\nBỏ qua \(result.skipped.count) dòng không hợp lệ (viết tắt chỉ gồm chữ a–z), ví dụ: "
+                + result.skipped.prefix(3).map { "“\($0.prefix(40))”" }.joined(separator: ", ")
+        }
+        alert("Nhập gõ tắt", info)
+    }
+
+    private func alert(_ title: String, _ text: String) {
+        let a = NSAlert()
+        a.messageText = title
+        a.informativeText = text
+        a.runModal()
     }
 
     private func addMacro() {

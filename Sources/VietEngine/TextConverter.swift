@@ -109,3 +109,51 @@ public enum Macro {
         return value
     }
 }
+
+/// Đọc/ghi file danh sách gõ tắt.
+/// Xuất: JSON {"vn": "Việt Nam", …}, khoá sắp xếp, dễ đọc.
+/// Nhập: JSON như trên, hoặc văn bản mỗi dòng một mục: "vn<Tab>Việt Nam", "vn = Việt Nam", "vn: Việt Nam".
+public enum MacroFile {
+    public struct ImportResult: Equatable {
+        public var macros: [String: String]
+        /// Các dòng/khoá bị bỏ qua (viết tắt không phải chữ a–z, hoặc thiếu cụm đầy đủ).
+        public var skipped: [String]
+    }
+
+    public static func isValidKey(_ k: String) -> Bool {
+        !k.isEmpty && k.count <= 32 && k.allSatisfy { $0.isASCII && $0.isLetter }
+    }
+
+    public static func export(_ macros: [String: String]) -> Data {
+        (try? JSONSerialization.data(withJSONObject: macros, options: [.prettyPrinted, .sortedKeys])) ?? Data("{}".utf8)
+    }
+
+    public static func parse(_ data: Data) -> ImportResult {
+        var out: [String: String] = [:]
+        var skipped: [String] = []
+        func add(_ k: String, _ v: String, raw: String) {
+            let key = k.trimmingCharacters(in: .whitespaces)
+            let value = v.trimmingCharacters(in: .whitespaces)
+            if isValidKey(key) && !value.isEmpty { out[key] = value.precomposedStringWithCanonicalMapping }
+            else { skipped.append(raw) }
+        }
+        if let obj = try? JSONSerialization.jsonObject(with: data), let dict = obj as? [String: Any] {
+            for (k, v) in dict {
+                if let s = v as? String { add(k, s, raw: k) } else { skipped.append(k) }
+            }
+            return ImportResult(macros: out, skipped: skipped.sorted())
+        }
+        let text = String(decoding: data, as: UTF8.self)
+        for line in text.split(whereSeparator: \.isNewline) {
+            let l = line.trimmingCharacters(in: .whitespaces)
+            if l.isEmpty || l.hasPrefix("#") || l.hasPrefix("//") { continue }
+            var parts: [Substring] = []
+            for sep: Character in ["\t", "=", ":"] {
+                let p = l.split(separator: sep, maxSplits: 1)
+                if p.count == 2 { parts = p; break }
+            }
+            if parts.count == 2 { add(String(parts[0]), String(parts[1]), raw: l) } else { skipped.append(l) }
+        }
+        return ImportResult(macros: out, skipped: skipped)
+    }
+}

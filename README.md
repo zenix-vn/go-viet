@@ -45,6 +45,10 @@ Trên thanh menu, chọn **Cách gửi phím ở <ứng dụng>** và thử lầ
 Cài đặt → Gõ tắt: thêm từ viết tắt (chỉ chữ a–z) và cụm đầy đủ. Gõ từ viết tắt rồi dấu cách hoặc dấu câu
 (`. , ; : ! ?`) để thay. Giữ kiểu chữ hoa: `vn` → `Việt Nam`, `Vn` → `Việt Nam`, `VN` → `VIỆT NAM`.
 
+**Nhập/xuất:** nút *Xuất ra file…* ghi JSON (`{"vn": "Việt Nam"}`). *Nhập từ file…* nhận JSON đó, hoặc văn bản
+mỗi dòng một mục `vn<Tab>Việt Nam`, `vn = Việt Nam`, `vn: Việt Nam` (dòng bắt đầu `#` là ghi chú). Mục trùng viết tắt
+được ghi đè bằng mục trong file.
+
 ## Soạn code và terminal
 
 Mặc định không gõ tiếng Việt trong ô soạn code và terminal của VS Code, Cursor, Windsurf, Antigravity…

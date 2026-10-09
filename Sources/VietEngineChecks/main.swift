@@ -139,5 +139,12 @@ eq(Macro.expand("Ko", table: table) ?? "nil", "Không", "gõ tắt Hoa đầu")
 eq(Macro.expand("VNĐ", table: table) ?? "nil", "đồng", "gõ tắt khớp đúng")
 eq(Macro.expand("abc", table: table) ?? "nil", "nil", "không có gõ tắt")
 
+// File gõ tắt
+let exported = MacroFile.export(["vn": "Việt Nam", "ko": "không"])
+eq(MacroFile.parse(exported).macros == ["vn": "Việt Nam", "ko": "không"] ? "ok" : "sai", "ok", "xuất rồi nhập lại JSON")
+let txt = MacroFile.parse(Data("# ghi chú\nvn\tViệt Nam\nhn = Hà Nội\ntp: thành phố\nsai dòng\nbad key=x\n".utf8))
+eq(txt.macros == ["vn": "Việt Nam", "hn": "Hà Nội", "tp": "thành phố"] ? "ok" : "\(txt.macros)", "ok", "nhập văn bản")
+eq("\(txt.skipped.count)", "2", "bỏ qua dòng sai")
+
 print(failed == 0 ? "OK: \(total)/\(total) ca kiểm thử đạt" : "THẤT BẠI: \(failed)/\(total)")
 exit(failed == 0 ? 0 : 1)

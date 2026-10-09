@@ -59,6 +59,13 @@ public final class TelexEngine {
         if typed.count >= 32 { reset() }
         raw.append(ch)
         typed.append(ch)
+        // "rr" rồi phụ âm (s-e-r-r-v-e-r): tiếng Anh gần như không có, đây là người dùng bấm r lần nữa
+        // để bỏ dấu hỏi vừa hiện ra. Giữ kiểu Telex (một chữ r), không khôi phục nguyên phím đã gõ.
+        let n = typed.count
+        if droppedUndo, n >= 3, !"aeiouyh".contains(Character(ch.lowercased())),   // "rrh": diarrhea, myrrh
+           typed[n - 2].lowercased() == "r", typed[n - 3].lowercased() == "r" {
+            droppedUndo = false
+        }
         apply(key: Character(ch.lowercased()), upper: ch.isUppercase)
         let new = Array(render())
         let old = displayed

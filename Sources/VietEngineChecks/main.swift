@@ -85,7 +85,7 @@ check("ass", "as"); check("off", "of"); check("per", "pẻ")
 // Từ tiếng Anh có chữ đôi giữ nguyên như đã gõ
 check("error", "error"); check("Larry", "Larry"); check("array", "array"); check("coffee", "coffee")
 check("offer", "offer"); check("assume", "assume"); check("less", "less"); check("pass", "pass")
-check("class", "class"); check("Serrver", "Serrver"); check("access", "access"); check("address", "address")
+check("class", "class"); check("Serrver", "Server"); check("serrver", "server"); check("Serrvice", "Service"); check("worrd", "word"); check("access", "access"); check("address", "address")
 check("assess", "assess"); check("hello", "hello"); check("current", "current"); check("mirror", "mirror")
 check("keeper", "keeper"); check("berseem", "berseem"); check("nongrooming", "nongrooming"); check("authorize", "authorize"); check("size", "size"); check("unfrozen", "unfrozen"); check("Saxonize", "Saxonize"); check("wordd", "wordd"); check("Larrry", "Larry"); check("Larrr", "Larr")
 

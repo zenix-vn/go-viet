@@ -25,9 +25,15 @@ struct AboutView: View {
             .padding(.vertical, 6)
             Divider()
             VStack(spacing: 4) {
-                Text("Phát triển bởi **Zenix Labs**")
-                Link("github.com/zenix-vn/go-viet", destination: URL(string: "https://github.com/zenix-vn/go-viet")!)
-                    .font(.callout)
+                HStack(spacing: 4) {
+                    Text("Phát triển bởi")
+                    Link("Zenix Labs", destination: URL(string: "https://zenix.vn/")!).bold()
+                }
+                HStack(spacing: 14) {
+                    Link("zenix.vn", destination: URL(string: "https://zenix.vn/")!)
+                    Link("Mã nguồn trên GitHub", destination: URL(string: "https://github.com/zenix-vn/go-viet")!)
+                }
+                .font(.callout)
                 Text("© 2026 Zenix Labs").font(.caption).foregroundStyle(.secondary)
             }
         }

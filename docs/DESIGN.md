@@ -1,7 +1,7 @@
 # GoViet — Bộ gõ tiếng Việt cho macOS
 
 > Tài liệu thiết kế · phiên bản 0.1 · 2026-10-09
-> **GoViet** nghĩa là *GoViet*: gõ tiếng Việt. Phát triển bởi **Zenix Labs**.
+> **GoViet** nghĩa là *Gõ Việt*: gõ tiếng Việt. Phát triển bởi **[Zenix Labs](https://zenix.vn/)**.
 
 ---
 

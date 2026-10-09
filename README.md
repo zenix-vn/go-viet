@@ -1,6 +1,6 @@
 # GoViet
 
-**GoViet** (*GoViet*): bộ gõ tiếng Việt Telex cho macOS. Phát triển bởi **Zenix Labs**.
+**GoViet** (*Gõ Việt*): bộ gõ tiếng Việt Telex cho macOS. Phát triển bởi **[Zenix Labs](https://zenix.vn/)**.
 
 Không gạch chân, không lặp chữ. Thiết kế chi tiết: [docs/DESIGN.md](docs/DESIGN.md).
 

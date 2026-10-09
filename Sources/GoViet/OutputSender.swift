@@ -16,7 +16,8 @@ final class OutputSender {
 
     /// Gọi đồng bộ trong callback của event tap để giữ đúng thứ tự phím.
     func send(delete: Int, insert: String, strategy: SendStrategy, delayMs: Int, proxy: CGEventTapProxy) {
-        let delayUs = UInt32(max(0, delayMs) * 1000)
+        // Giới hạn 0…20 ms: callback chạy quá lâu thì macOS tự tắt event tap
+        let delayUs = UInt32(min(max(0, delayMs), 20) * 1000)
 
         switch strategy {
         case .backspace:

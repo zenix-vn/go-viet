@@ -14,6 +14,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         NSApp.setActivationPolicy(.accessory)
+        DebugLog.cleanUp()
         setupStatusItem()
 
         keyTap.frontBundleID = NSWorkspace.shared.frontmostApplication?.bundleIdentifier
@@ -26,6 +27,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
 
         startTapOrAskPermission()
         updateStatusTitle()
+        watchPermission()
 
         // Thanh menu đông (hoặc bị tai thỏ che) có thể làm mất icon: lần đầu chạy thì mở Cài đặt cho dễ thấy.
         if keyTap.isRunning, !UserDefaults.standard.bool(forKey: "didShowWelcome") {
@@ -61,6 +63,17 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
                     self.updateStatusTitle()
                 }
             }
+        }
+    }
+
+    /// Quyền Trợ năng bị thu hồi khi app đang chạy mà tap vẫn còn thì bàn phím có thể bị treo:
+    /// kiểm tra định kỳ, mất quyền thì gỡ tap ngay và quay lại màn hình xin quyền.
+    private func watchPermission() {
+        Timer.scheduledTimer(withTimeInterval: 2, repeats: true) { [weak self] _ in
+            guard let self, self.keyTap.isRunning, !AXIsProcessTrusted() else { return }
+            self.keyTap.stop()
+            self.updateStatusTitle()
+            self.startTapOrAskPermission()
         }
     }
 
@@ -181,7 +194,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
 
     func menuNeedsUpdate(_ menu: NSMenu) {
         menu.removeAllItems()
-        let appName = NSWorkspace.shared.frontmostApplication?.localizedName ?? "ứng dụng này"
+        let appName = frontAppName ?? "ứng dụng này"
 
         if !keyTap.isRunning {
             menu.addItem(withTitle: "Chưa có quyền Trợ năng…", action: #selector(askPermission), keyEquivalent: "").target = self
@@ -222,6 +235,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
         menu.addItem(withTitle: "Thoát Gõ Việt", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q")
     }
 
+    /// Tên ứng dụng mà Gõ Việt đang gõ vào (không phải chính Gõ Việt khi cửa sổ Cài đặt đang mở).
+    private var frontAppName: String? {
+        guard let id = keyTap.frontBundleID else { return nil }
+        return NSRunningApplication.runningApplications(withBundleIdentifier: id).first?.localizedName
+    }
+
     @objc private func toggleFromMenu() { toggleMode() }
     @objc private func askPermission() { startTapOrAskPermission() }
     @objc private func setOldTone() { settings.modernTone = false }
@@ -229,15 +248,14 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
 
     @objc private func toggleExclude() {
         guard let id = keyTap.frontBundleID else { return }
-        let name = NSWorkspace.shared.frontmostApplication?.localizedName ?? id
-        settings.updateRule(id, name: name) { $0.excluded.toggle() }
+        settings.updateRule(id, name: frontAppName ?? id) { $0.excluded.toggle() }
         keyTap.engine.reset()
         updateStatusTitle()
     }
 
     @objc private func pickStrategy(_ item: NSMenuItem) {
         guard let id = keyTap.frontBundleID else { return }
-        let name = NSWorkspace.shared.frontmostApplication?.localizedName ?? id
+        let name = frontAppName ?? id
         let value = SendStrategy(rawValue: item.representedObject as? String ?? "")
         settings.updateRule(id, name: name) { $0.strategy = value }
     }

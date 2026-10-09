@@ -1,4 +1,5 @@
 import Cocoa
+import Carbon
 import VietEngine
 
 /// Chặn phím toàn hệ thống, chạy engine, và gửi chữ đã sửa ra ứng dụng.
@@ -73,6 +74,12 @@ final class KeyTap {
         }
 
         guard isVietnamese, !settings.isExcluded(frontBundleID) else { return pass }
+
+        // Ô mật khẩu / chế độ nhập an toàn: không xử lý, không ghi nhật ký
+        if IsSecureEventInputEnabled() {
+            engine.reset()
+            return pass
+        }
 
         if !flags.intersection([.maskCommand, .maskControl, .maskAlternate]).isEmpty {
             engine.reset()

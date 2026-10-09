@@ -55,6 +55,8 @@ public final class TelexEngine {
 
     /// `ch` phải là một chữ cái ASCII a-z hoặc A-Z.
     public func handleLetter(_ ch: Character) -> EngineOutput {
+        // Không có từ tiếng Việt nào dài thế này (thường là giữ phím lặp): bắt đầu từ mới để bộ đệm không phình ra.
+        if typed.count >= 32 { reset() }
         raw.append(ch)
         typed.append(ch)
         apply(key: Character(ch.lowercased()), upper: ch.isUppercase)

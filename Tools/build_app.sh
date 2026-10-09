@@ -40,7 +40,8 @@ cat > "$APP/Contents/Info.plist" <<PLIST
 PLIST
 
 # Ký ad-hoc với yêu cầu định danh cố định (theo bundle ID) để quyền Trợ năng không mất sau mỗi lần build lại.
-codesign --force --sign - -r="designated => identifier \"$BUNDLE_ID\"" "$APP"
+# --options runtime (Hardened Runtime): chặn chèn thư viện (DYLD_INSERT_LIBRARIES…) để mượn quyền đọc phím của app.
+codesign --force --options runtime --sign - -r="designated => identifier \"$BUNDLE_ID\"" "$APP"
 echo "Đã dựng: $APP"
 
 if [[ "${1:-}" == "--install" ]]; then

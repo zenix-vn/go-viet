@@ -89,6 +89,10 @@ check("class", "class"); check("Serrver", "Serrver"); check("access", "access");
 check("assess", "assess"); check("hello", "hello"); check("current", "current"); check("mirror", "mirror")
 check("keeper", "keeper"); check("berseem", "berseem"); check("nongrooming", "nongrooming"); check("authorize", "authorize"); check("size", "size"); check("unfrozen", "unfrozen"); check("Saxonize", "Saxonize"); check("wordd", "wordd"); check("Larrry", "Larry"); check("Larrr", "Larr")
 
+// Từ rất dài (giữ phím lặp) không làm hỏng engine
+check(String(repeating: "x", count: 100) + " as", String(repeating: "x", count: 100) + " á")
+check(String(repeating: "b", count: 40) + "as", String(repeating: "b", count: 40) + "as")
+
 // Chữ hoa
 check("Ow", "Ơ"); check("OW", "Ơ"); check("TIEENGS", "TIẾNG"); check("NGUOWIF", "NGƯỜI")
 

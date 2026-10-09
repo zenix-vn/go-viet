@@ -28,6 +28,10 @@ public final class TelexEngine {
     private var tone: Tone = .none
     private var raw: [Character] = []
     private var undone: Set<Character> = []
+    /// Mọi phím đã gõ trong từ, đúng như người dùng bấm.
+    private var typed: [Character] = []
+    /// Đã có một phím dấu bị "ăn" khi huỷ (rr, ss, eee…) hoặc bị phím z xoá.
+    private var droppedUndo = false
     /// Chữ của từ hiện đang nằm trên màn hình.
     public private(set) var displayed: [Character] = []
 
@@ -42,6 +46,8 @@ public final class TelexEngine {
         raw.removeAll(keepingCapacity: true)
         undone.removeAll(keepingCapacity: true)
         displayed.removeAll(keepingCapacity: true)
+        typed.removeAll(keepingCapacity: true)
+        droppedUndo = false
         tone = .none
     }
 
@@ -50,6 +56,7 @@ public final class TelexEngine {
     /// `ch` phải là một chữ cái ASCII a-z hoặc A-Z.
     public func handleLetter(_ ch: Character) -> EngineOutput {
         raw.append(ch)
+        typed.append(ch)
         apply(key: Character(ch.lowercased()), upper: ch.isUppercase)
         let new = Array(render())
         let old = displayed
@@ -89,12 +96,21 @@ public final class TelexEngine {
 
     /// Gõ phím dấu lần hai để huỷ ("rr" → "r"): phím đầu đã bị dấu "ăn", nên chữ gốc chỉ còn một phím đó.
     private func dropUndoneKey(_ key: Character) {
+        droppedUndo = true
         let body = raw.dropLast()
         if let i = body.lastIndex(where: { Character($0.lowercased()) == key }) { raw.remove(at: i) }
     }
 
     private func apply(key: Character, upper: Bool) {
-        if undone.contains(key) { return literal(key, upper) }
+        if undone.contains(key) {
+            // Gõ liền phím dấu lần thứ ba: người dùng chủ động muốn Telex chuẩn ("asss" → "ass"), bỏ quy tắc giữ nguyên.
+            if typed.count >= 3,
+               Character(typed[typed.count - 2].lowercased()) == key,
+               Character(typed[typed.count - 3].lowercased()) == key {
+                droppedUndo = false
+            }
+            return literal(key, upper)
+        }
         let transformed = tone != .none || letters.contains { $0.mark != .none }
         let showingRaw = transformed && !Syllable.isValid(letters, tone: tone)
 
@@ -113,7 +129,12 @@ public final class TelexEngine {
             }
 
         case "z":
-            if tone != .none { tone = .none } else { literal(key, upper) }
+            if tone != .none {
+                tone = .none
+                droppedUndo = true   // z đã "ăn" phím dấu trước đó (authorize, size…)
+            } else {
+                literal(key, upper)
+            }
 
         case "a", "e", "o":
             if let idx = letters.lastIndex(where: { $0.base == key }) {
@@ -220,6 +241,9 @@ public final class TelexEngine {
     // MARK: - Dựng chữ hiển thị
 
     private func render() -> String {
+        // Từ tiếng Anh có chữ đôi (Larry, coffee, array, error…): phím dấu bị huỷ mà từ không phải
+        // tiếng Việt thì giữ nguyên các phím đã gõ. Từ ngắn (≤ 2 chữ, như "ass" → "as") vẫn theo Telex.
+        if droppedUndo, letters.count >= 3, !Syllable.isValid(letters, tone: tone) { return String(typed) }
         let transformed = tone != .none || letters.contains { $0.mark != .none }
         if !transformed { return compose(tonePos: nil) }
         guard Syllable.isValid(letters, tone: tone) else { return String(raw) }
@@ -252,6 +276,8 @@ public final class TelexEngine {
             }
         }
         raw = chars
+        typed = chars
+        droppedUndo = false
         displayed = chars
     }
 }

@@ -5,6 +5,7 @@ import VietEngine
 final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWindowDelegate {
     private let settings = AppSettings.shared
     private let keyTap = KeyTap()
+    private let clipboard = ClipboardManager()
     private var statusItem: NSStatusItem!
     private var settingsWindow: NSWindow?
     private var permissionWindow: NSWindow?
@@ -18,8 +19,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
         setupStatusItem()
 
         keyTap.frontBundleID = NSWorkspace.shared.frontmostApplication?.bundleIdentifier
+        keyTap.frontPID = NSWorkspace.shared.frontmostApplication?.processIdentifier
         keyTap.isVietnamese = settings.mode(for: keyTap.frontBundleID)
         keyTap.onToggle = { [weak self] in self?.toggleMode() }
+        keyTap.onClipboardHotkey = { [weak self] in self?.clipboard.showPopup() }
+        clipboard.notify = { [weak self] in self?.showHUD($0) }
+        clipboard.start()
 
         NSWorkspace.shared.notificationCenter.addObserver(
             self, selector: #selector(appActivated(_:)),
@@ -92,6 +97,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
         let app = note.userInfo?[NSWorkspace.applicationUserInfoKey] as? NSRunningApplication
         guard let id = app?.bundleIdentifier, id != Bundle.main.bundleIdentifier else { return }
         keyTap.frontBundleID = id
+        keyTap.frontPID = app?.processIdentifier
         keyTap.isVietnamese = settings.mode(for: id)
         keyTap.engine.reset()
         updateStatusTitle()
@@ -214,6 +220,25 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
         new.target = self
         menu.addItem(.separator())
 
+        let code = menu.addItem(withTitle: "Không gõ tiếng Việt khi soạn code", action: #selector(toggleCode), keyEquivalent: "")
+        code.state = settings.disableInCode ? .on : .off
+        code.target = self
+        let term = menu.addItem(withTitle: "Không gõ tiếng Việt trong terminal", action: #selector(toggleTerminal), keyEquivalent: "")
+        term.state = settings.disableInTerminal ? .on : .off
+        term.target = self
+        menu.addItem(.separator())
+
+        let clip = NSMenuItem(title: "Clipboard (⌃⌥V)", action: nil, keyEquivalent: "")
+        clip.submenu = NSMenu()
+        clip.submenu!.addItem(withTitle: "Mở lịch sử clipboard", action: #selector(openClipboard), keyEquivalent: "").target = self
+        clip.submenu!.addItem(.separator())
+        clipboard.addConversionItems(to: clip.submenu!)
+        menu.addItem(clip)
+        let macro = menu.addItem(withTitle: "Gõ tắt", action: #selector(toggleMacros), keyEquivalent: "")
+        macro.state = settings.macrosEnabled ? .on : .off
+        macro.target = self
+        menu.addItem(.separator())
+
         let ex = menu.addItem(withTitle: "Không dùng Gõ Việt ở \(appName)", action: #selector(toggleExclude), keyEquivalent: "")
         ex.state = settings.isExcluded(keyTap.frontBundleID) ? .on : .off
         ex.target = self
@@ -243,6 +268,13 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
 
     @objc private func toggleFromMenu() { toggleMode() }
     @objc private func askPermission() { startTapOrAskPermission() }
+    @objc private func openClipboard() {
+        // Đợi menu thanh trạng thái đóng hẳn rồi mới mở menu clipboard
+        DispatchQueue.main.async { self.clipboard.showPopup() }
+    }
+    @objc private func toggleMacros() { settings.macrosEnabled.toggle() }
+    @objc private func toggleCode() { settings.disableInCode.toggle() }
+    @objc private func toggleTerminal() { settings.disableInTerminal.toggle() }
     @objc private func setOldTone() { settings.modernTone = false }
     @objc private func setNewTone() { settings.modernTone = true }
 

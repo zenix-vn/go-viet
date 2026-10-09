@@ -31,3 +31,23 @@ Trên thanh menu, chọn **Cách gửi phím ở <ứng dụng>** và thử lầ
 - Gõ đôi phím dấu để bỏ dấu (Telex chuẩn): `pussh` → `push`, `serrver` → `server`.
 - Vì vậy chữ đôi thật đứng trước phụ âm hoặc cuối từ cần gõ ba lần: `passsword` → `password`, `passs` → `pass`.
 - Đoạn dài tiếng Anh: bấm ⌃ Space để chuyển sang chế độ E.
+
+## Clipboard
+
+- **⌃⌥V** mở menu tại con trỏ chuột: chọn một mục trong lịch sử để dán (phím 1–9 chọn nhanh),
+  hoặc **Chuyển mã clipboard**: bỏ dấu, TCVN3 → Unicode, VNI Windows → Unicode, Unicode tổ hợp → dựng sẵn,
+  CHỮ HOA, chữ thường, Viết Hoa Đầu Từ.
+- Lịch sử (25 mục gần nhất) chỉ nằm trong bộ nhớ, mất khi thoát app. Nội dung do trình quản lý mật khẩu
+  đánh dấu là mật khẩu không được lưu. Tắt trong Cài đặt → Chung.
+
+## Gõ tắt
+
+Cài đặt → Gõ tắt: thêm từ viết tắt (chỉ chữ a–z) và cụm đầy đủ. Gõ từ viết tắt rồi dấu cách hoặc dấu câu
+(`. , ; : ! ?`) để thay. Giữ kiểu chữ hoa: `vn` → `Việt Nam`, `Vn` → `Việt Nam`, `VN` → `VIỆT NAM`.
+
+## Soạn code và terminal
+
+Mặc định không gõ tiếng Việt trong ô soạn code và terminal của VS Code, Cursor, Windsurf, Antigravity…
+(ô chat, ô tìm kiếm vẫn gõ được) và trong các ứng dụng terminal (Terminal, iTerm2, Warp, Ghostty…).
+Gõ Việt phải bật cây Accessibility của các trình soạn thảo này; để VS Code không tự chuyển sang chế độ
+trình đọc màn hình, đặt `"editor.accessibilitySupport": "off"` trong cài đặt VS Code.

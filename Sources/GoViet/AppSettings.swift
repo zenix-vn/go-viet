@@ -70,6 +70,15 @@ final class AppSettings: ObservableObject {
     @Published var hotkey: Hotkey { didSet { d.set(hotkey.rawValue, forKey: "hotkey") } }
     /// Độ trễ giữa các phím gửi ra, đơn vị ms (0 = không trễ).
     @Published var keyDelayMs: Int { didSet { d.set(keyDelayMs, forKey: "keyDelayMs") } }
+    /// Không gõ tiếng Việt khi đang soạn code (VS Code, Cursor…); ô chat, ô tìm kiếm vẫn gõ được.
+    @Published var disableInCode: Bool { didSet { d.set(disableInCode, forKey: "disableInCode") } }
+    /// Không gõ tiếng Việt trong terminal (ứng dụng terminal và terminal tích hợp trong trình soạn thảo).
+    @Published var disableInTerminal: Bool { didSet { d.set(disableInTerminal, forKey: "disableInTerminal") } }
+    /// Lưu lịch sử clipboard (chỉ trong bộ nhớ).
+    @Published var clipboardHistory: Bool { didSet { d.set(clipboardHistory, forKey: "clipboardHistory") } }
+    @Published var macrosEnabled: Bool { didSet { d.set(macrosEnabled, forKey: "macrosEnabled") } }
+    /// Gõ tắt: từ viết tắt → cụm từ đầy đủ.
+    @Published var macros: [String: String] { didSet { d.set(macros, forKey: "macros") } }
     @Published var rules: [String: AppRule] {
         didSet { d.set(try? JSONEncoder().encode(rules), forKey: "rules") }
     }
@@ -81,6 +90,11 @@ final class AppSettings: ObservableObject {
         wToU = d.object(forKey: "wToU") as? Bool ?? true
         hotkey = Hotkey(rawValue: d.string(forKey: "hotkey") ?? "") ?? .ctrlSpace
         keyDelayMs = d.integer(forKey: "keyDelayMs")
+        clipboardHistory = d.object(forKey: "clipboardHistory") as? Bool ?? true
+        macrosEnabled = d.object(forKey: "macrosEnabled") as? Bool ?? true
+        macros = d.dictionary(forKey: "macros") as? [String: String] ?? [:]
+        disableInCode = d.object(forKey: "disableInCode") as? Bool ?? true
+        disableInTerminal = d.object(forKey: "disableInTerminal") as? Bool ?? true
         rules = (d.data(forKey: "rules").flatMap { try? JSONDecoder().decode([String: AppRule].self, from: $0) }) ?? [:]
         appModes = d.dictionary(forKey: "appModes") as? [String: Bool] ?? [:]
     }
@@ -94,6 +108,14 @@ final class AppSettings: ObservableObject {
         guard let id = bundleID else { return }
         appModes[id] = vietnamese
         d.set(appModes, forKey: "appModes")
+    }
+
+    func isDisabled(in zone: InputZone) -> Bool {
+        switch zone {
+        case .code: return disableInCode
+        case .terminal: return disableInTerminal
+        case .other: return false
+        }
     }
 
     func isExcluded(_ bundleID: String?) -> Bool {

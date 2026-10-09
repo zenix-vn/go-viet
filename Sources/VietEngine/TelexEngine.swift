@@ -40,6 +40,8 @@ public final class TelexEngine {
     }
 
     public var isEmpty: Bool { displayed.isEmpty }
+    /// Các phím đã gõ của từ hiện tại, đúng như đã bấm ("as" dù màn hình đang là "á").
+    public var typedText: String { String(typed) }
 
     public func reset() {
         letters.removeAll(keepingCapacity: true)

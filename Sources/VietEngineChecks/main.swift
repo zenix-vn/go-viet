@@ -111,5 +111,33 @@ check("hoaf\u{8}", "hò"); check("hoafn\u{8}n", "hoàn")
 check("a\u{8}s", "s"); check("tieengs\u{8}\u{8}\u{8}", "ti")
 check("Vieetj\u{8}ts", "Viết"); check("Vieetj\u{8}\u{8}ts", "Vít")
 
+// Chuyển mã clipboard
+func eq(_ got: String, _ want: String, _ label: String) {
+    total += 1
+    if got != want { failed += 1; print("FAIL  \(label): \(got)   (mong đợi \(want))") }
+}
+eq(TextConverter.removeDiacritics("Tiếng Việt Đà Nẵng"), "Tieng Viet Da Nang", "bỏ dấu")
+eq(TextConverter.fromTCVN3("TiÕng ViÖt"), "Tiếng Việt", "TCVN3")
+eq(TextConverter.fromTCVN3("Hµ Néi"), "Hà Nội", "TCVN3")
+eq(TextConverter.fromTCVN3("\u{AE}\u{AD}\u{EE}c"), "được", "TCVN3")
+eq(TextConverter.fromVNI("Tieáng Vieät"), "Tiếng Việt", "VNI")
+eq(TextConverter.fromVNI("Haø Noäi"), "Hà Nội", "VNI")
+eq(TextConverter.fromVNI("ñöôïc"), "được", "VNI")
+eq(TextConverter.fromVNI("Ñoàng"), "Đồng", "VNI")
+eq(TextConverter.fromVNI("VIEÄT NAM"), "VIỆT NAM", "VNI")
+eq(TextConverter.fromVNI("Ñaø Naüng"), "Đà Nẵng", "VNI")
+eq(TextConverter.fromVNI("thuyû"), "thuỷ", "VNI")
+eq(TextConverter.precomposed("Vie\u{0302}\u{0323}t"), "Việt", "NFC")
+eq(TextConverter.titleCased("tiếng việt"), "Tiếng Việt", "hoa đầu từ")
+eq(TextConverter.uppercased("đường"), "ĐƯỜNG", "chữ hoa")
+
+// Gõ tắt
+let table = ["vn": "Việt Nam", "ko": "không", "VNĐ": "đồng"]
+eq(Macro.expand("vn", table: table) ?? "nil", "Việt Nam", "gõ tắt")
+eq(Macro.expand("VN", table: table) ?? "nil", "VIỆT NAM", "gõ tắt HOA")
+eq(Macro.expand("Ko", table: table) ?? "nil", "Không", "gõ tắt Hoa đầu")
+eq(Macro.expand("VNĐ", table: table) ?? "nil", "đồng", "gõ tắt khớp đúng")
+eq(Macro.expand("abc", table: table) ?? "nil", "nil", "không có gõ tắt")
+
 print(failed == 0 ? "OK: \(total)/\(total) ca kiểm thử đạt" : "THẤT BẠI: \(failed)/\(total)")
 exit(failed == 0 ? 0 : 1)

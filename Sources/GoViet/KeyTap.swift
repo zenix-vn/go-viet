@@ -12,10 +12,15 @@ final class KeyTap {
     private var tap: CFMachPort?
     private var runLoopSource: CFRunLoopSource?
 
-    /// Bundle ID của ứng dụng đang active (do AppDelegate cập nhật).
-    var frontBundleID: String?
+    /// Bundle ID và PID của ứng dụng đang active (do AppDelegate cập nhật).
+    var frontBundleID: String? { didSet { zone = nil } }
+    var frontPID: pid_t?
+    /// Vùng gõ hiện tại (code / terminal / thường). nil: chưa biết, sẽ hỏi Accessibility ở phím chữ kế tiếp.
+    /// Xoá khi focus có thể đã đổi: click chuột, đổi ứng dụng, phím tắt có ⌘/⌃/⌥, Esc, Tab.
+    private var zone: InputZone?
     var isVietnamese = true { didSet { engine.reset() } }
     var onToggle: (() -> Void)?
+    var onClipboardHotkey: (() -> Void)?
 
     var isRunning: Bool { tap != nil }
 
@@ -61,6 +66,7 @@ final class KeyTap {
             return pass
         case .leftMouseDown, .rightMouseDown, .otherMouseDown:
             engine.reset()
+            zone = nil
             return pass
         case .keyDown:
             break
@@ -77,6 +83,11 @@ final class KeyTap {
             onToggle?()
             return nil
         }
+        // ⌃⌥V: menu clipboard. Mở sau khi callback trả về, không chặn luồng phím.
+        if keyCode == 9, flags.intersection([.maskCommand, .maskControl, .maskAlternate, .maskShift]) == [.maskControl, .maskAlternate] {
+            DispatchQueue.main.async { [weak self] in self?.onClipboardHotkey?() }
+            return nil
+        }
 
         guard isVietnamese, !settings.isExcluded(frontBundleID) else { return pass }
 
@@ -88,13 +99,26 @@ final class KeyTap {
 
         if !flags.intersection([.maskCommand, .maskControl, .maskAlternate]).isEmpty {
             engine.reset()
+            zone = nil
             return pass
         }
+        if keyCode == 53 || keyCode == 48 { zone = nil }   // Esc, Tab: có thể chuyển focus
         if keyCode == 51 {            // Backspace: phím vẫn đi qua, engine tự cập nhật
             engine.handleBackspace()
             return pass
         }
         guard let ch = asciiLetter(event) else {
+            if let out = expandMacro(event, proxy) { return out }
+            engine.reset()
+            return pass
+        }
+
+        // Vùng soạn code / terminal đã tắt tiếng Việt: để phím đi qua như chế độ E
+        if zone == nil {
+            zone = FocusZone.zone(bundleID: frontBundleID, pid: frontPID)
+            DebugLog.write("\(frontBundleID ?? "?") vùng gõ: \(zone!.rawValue)")
+        }
+        if let z = zone, settings.isDisabled(in: z) {
             engine.reset()
             return pass
         }
@@ -115,6 +139,25 @@ final class KeyTap {
                         delayMs: settings.keyDelayMs, proxy: proxy)
             return nil
         }
+    }
+
+    /// Gõ tắt: dấu cách hoặc dấu câu ngay sau một từ có trong bảng gõ tắt → thay từ đó bằng cụm đầy đủ.
+    /// Trả về nil nếu không gõ tắt (để xử lý phím như bình thường).
+    private func expandMacro(_ event: CGEvent, _ proxy: CGEventTapProxy) -> Unmanaged<CGEvent>?? {
+        guard settings.macrosEnabled, !settings.macros.isEmpty, !engine.isEmpty else { return nil }
+        var len = 0
+        var buf = [UniChar](repeating: 0, count: 4)
+        event.keyboardGetUnicodeString(maxStringLength: 4, actualStringLength: &len, unicodeString: &buf)
+        guard len == 1, let s = Unicode.Scalar(buf[0]), " .,;:!?".unicodeScalars.contains(s) else { return nil }
+        let word = String(engine.displayed)
+        // Khớp chữ trên màn hình trước ("vn"), rồi tới phím đã gõ (gõ tắt "as" dù màn hình đã thành "á")
+        guard let expansion = Macro.expand(word, table: settings.macros)
+                ?? Macro.expand(engine.typedText, table: settings.macros) else { return nil }
+        DebugLog.write("gõ tắt: \(word) → \(expansion)")
+        sender.send(delete: word.count, insert: expansion + String(Character(s)),
+                    strategy: settings.strategy(for: frontBundleID), delayMs: settings.keyDelayMs, proxy: proxy)
+        engine.reset()
+        return .some(nil)   // nuốt phím gốc: dấu cách đã được gõ lại sau cụm từ
     }
 
     private func asciiLetter(_ event: CGEvent) -> Character? {

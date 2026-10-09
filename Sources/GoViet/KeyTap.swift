@@ -88,7 +88,10 @@ final class KeyTap {
         }
 
         engine.options = EngineOptions(modernTone: settings.modernTone, wToU: settings.wToU)
-        switch engine.handleLetter(ch) {
+        let before = String(engine.displayed)
+        let out = engine.handleLetter(ch)
+        DebugLog.write("\(frontBundleID ?? "?") gõ \(ch): \"\(before)\" → \"\(String(engine.displayed))\" \(out)")
+        switch out {
         case .passThrough:
             return pass
         case .replace(let del, let ins):

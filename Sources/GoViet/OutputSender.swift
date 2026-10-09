@@ -28,13 +28,8 @@ final class OutputSender {
             for _ in 0..<delete { key(kVKLeft, flags: .maskShift, proxy, delayUs) }
         }
 
-        let units = Array(insert.utf16)
-        var i = 0
-        while i < units.count {      // tối đa 20 UTF-16 unit mỗi event
-            let end = min(i + 20, units.count)
-            type(Array(units[i..<end]), proxy, delayUs)
-            i = end
-        }
+        // Mỗi ký tự một sự kiện: nhiều ứng dụng Chromium/Electron xử lý chuỗi nhiều ký tự trong một phím không ổn định.
+        for unit in insert.utf16 { type([unit], proxy, delayUs) }
     }
 
     private func key(_ code: CGKeyCode, flags: CGEventFlags, _ proxy: CGEventTapProxy, _ delayUs: UInt32) {

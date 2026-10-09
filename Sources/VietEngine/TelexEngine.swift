@@ -87,6 +87,12 @@ public final class TelexEngine {
         tone = .none
     }
 
+    /// Gõ phím dấu lần hai để huỷ ("rr" → "r"): phím đầu đã bị dấu "ăn", nên chữ gốc chỉ còn một phím đó.
+    private func dropUndoneKey(_ key: Character) {
+        let body = raw.dropLast()
+        if let i = body.lastIndex(where: { Character($0.lowercased()) == key }) { raw.remove(at: i) }
+    }
+
     private func apply(key: Character, upper: Bool) {
         if undone.contains(key) { return literal(key, upper) }
         let transformed = tone != .none || letters.contains { $0.mark != .none }
@@ -99,6 +105,7 @@ public final class TelexEngine {
             if tone == t {
                 undone.insert(key)
                 if showingRaw { return restoreRaw() }
+                dropUndoneKey(key)
                 tone = .none
                 literal(key, upper)
             } else {
@@ -117,6 +124,7 @@ public final class TelexEngine {
                 case .circumflex:
                     undone.insert(key)
                     if showingRaw { return restoreRaw() }
+                    dropUndoneKey(key)
                     letters[idx].mark = .none
                 default: break
                 }
@@ -131,6 +139,7 @@ public final class TelexEngine {
                 } else if first.mark == .stroke {
                     undone.insert(key)
                     if showingRaw { return restoreRaw() }
+                    dropUndoneKey(key)
                     letters[0].mark = .none
                 }
             }
@@ -166,6 +175,7 @@ public final class TelexEngine {
             if letters[u].mark == .horn && letters[o].mark == .horn {
                 undone.insert("w")
                 if showingRaw { return restoreRaw() }
+                dropUndoneKey("w")
                 letters[u].mark = .none
                 letters[o].mark = .none
                 return literal("w", upper)
@@ -186,6 +196,7 @@ public final class TelexEngine {
                     undone.insert("w")
                     return restoreRaw()
                 }
+                dropUndoneKey("w")
                 if letters[idx].fromW {
                     letters[idx] = Letter(base: "w", upper: letters[idx].upper)
                 } else {

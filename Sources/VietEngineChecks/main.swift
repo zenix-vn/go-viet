@@ -77,6 +77,11 @@ check("fix", "fix"); check("next", "next"); check("world", "world"); check("swif
 check("github", "github"); check("email", "email"); check("service", "service")
 check("w", "ư"); check("w", "w", wToU: false); check("nw", "nư")
 
+check("Serrver", "Server"); check("Server", "Server"); check("server", "server"); check("never", "never")
+// Telex chuẩn: gõ r hai lần huỷ dấu hỏi, nên "error" ra "eror"; muốn "error" gõ "errror"
+check("error", "eror"); check("errror", "error"); check("per", "pẻ")
+check("Serrvice", "Service"); check("servrer", "servrer"); check("passs", "pass"); check("wordd", "wordd")
+
 // Chữ hoa
 check("Ow", "Ơ"); check("OW", "Ơ"); check("TIEENGS", "TIẾNG"); check("NGUOWIF", "NGƯỜI")
 

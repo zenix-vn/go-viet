@@ -1,7 +1,7 @@
-# Gõ Việt — Bộ gõ tiếng Việt cho macOS
+# GoViet — Bộ gõ tiếng Việt cho macOS
 
 > Tài liệu thiết kế · phiên bản 0.1 · 2026-10-09
-> Tên ứng dụng "Gõ Việt" là tên tạm.
+> **GoViet** nghĩa là *GoViet*: gõ tiếng Việt. Phát triển bởi **Zenix Labs**.
 
 ---
 
@@ -59,7 +59,7 @@ Cách này cũng có những lỗi riêng, nhưng đều sửa được. Mục 6
 **Chọn phương án C.** Phương án B được giữ lại làm chiến lược dự phòng cho ứng dụng nào làm việc tốt với nó (xem mục 6.3).
 
 Hệ quả khi chọn C:
-- Người dùng giữ nguồn nhập của macOS ở **ABC (U.S.)**. Gõ Việt chạy như một ứng dụng nền trên thanh menu, không phải là một Input Source.
+- Người dùng giữ nguồn nhập của macOS ở **ABC (U.S.)**. GoViet chạy như một ứng dụng nền trên thanh menu, không phải là một Input Source.
 - Ứng dụng cần quyền **Accessibility** (để chặn và gửi phím) và có thể cần cả **Input Monitoring**.
 - Phát hành bản ký Developer ID kèm notarize, tải trực tiếp, vì sandbox của Mac App Store không cho phép event tap.
 
@@ -69,7 +69,7 @@ Hệ quả khi chọn C:
 
 ```
 ┌──────────────────────────────────────────────────────────────┐
-│                     Gõ Việt.app (menu bar)                    │
+│                     GoViet.app (menu bar)                    │
 │                                                              │
 │  ┌──────────────┐   phím   ┌──────────────┐  ký tự  ┌──────┐ │
 │  │  KeyTap      │────────▶│  Engine      │───────▶│Output│ │
@@ -200,7 +200,7 @@ Người dùng bấm "f" sau "truong"
   │
   ▼
 KeyTap callback (trên luồng của event tap)
-  ├─ Event do chính Gõ Việt gửi ra? ── có ──▶ cho qua, không xử lý
+  ├─ Event do chính GoViet gửi ra? ── có ──▶ cho qua, không xử lý
   ├─ Đang ở chế độ E, app nằm trong danh sách loại trừ, hoặc là ô mật khẩu? ──▶ cho qua
   ├─ Engine.process("f") ──▶ replace(deleteCount: 3, insert: "ờng")
   ├─ Nuốt phím gốc (callback trả về NULL)
@@ -223,7 +223,7 @@ KeyTap callback (trên luồng của event tap)
 
 ### 6.3 Chiến lược gửi theo từng ứng dụng (AppProfile)
 
-Không có cách gửi nào chạy đúng 100% ở mọi ứng dụng, nên Gõ Việt có nhiều chiến lược và chọn theo **bundle ID** của app, kết hợp với **AXRole** của ô đang focus:
+Không có cách gửi nào chạy đúng 100% ở mọi ứng dụng, nên GoViet có nhiều chiến lược và chọn theo **bundle ID** của app, kết hợp với **AXRole** của ô đang focus:
 
 | Chiến lược | Cách làm | Dùng cho |
 |-----------|----------|----------|
@@ -279,7 +279,7 @@ Người dùng có thể **tự ghi đè chiến lược cho từng app** trong 
 
 ## 8. Bảo mật và quyền riêng tư
 
-- Gõ Việt **không ghi lại và không gửi** phím đi đâu. Ứng dụng không có mã kết nối mạng.
+- GoViet **không ghi lại và không gửi** phím đi đâu. Ứng dụng không có mã kết nối mạng.
 - Nhật ký debug mặc định tắt. Khi bật, nhật ký chỉ lưu trên máy và tự xoá sau 24 giờ.
 - Bộ đệm chỉ chứa từ đang gõ và bị xoá khi kết thúc từ.
 - Mã nguồn công khai để người dùng tự kiểm chứng (nếu bạn muốn).
@@ -342,7 +342,7 @@ TiengViet/
 │       ├── SettingsView.swift / PermissionView.swift
 │       └── main.swift
 └── Tools/
-    ├── build_app.sh               # dựng "Gõ Việt.app" (--install để chép vào /Applications)
+    ├── build_app.sh               # dựng "GoViet.app" (--install để chép vào /Applications)
     └── make_icon.swift            # cắt icon.png thành bộ .iconset
 ```
 

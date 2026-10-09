@@ -140,7 +140,7 @@ final class ClipboardManager: NSObject {
         return one.count > 60 ? String(one.prefix(60)) + "…" : one
     }
 
-    /// Gửi ⌘V (gắn dấu của Gõ Việt để KeyTap bỏ qua).
+    /// Gửi ⌘V (gắn dấu của GoViet để KeyTap bỏ qua).
     static func pasteKeystroke() {
         let src = CGEventSource(stateID: .privateState)
         for down in [true, false] {

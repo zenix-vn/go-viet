@@ -1,6 +1,8 @@
-# Gõ Việt
+# GoViet
 
-Bộ gõ tiếng Việt Telex cho macOS, không gạch chân, không lặp chữ. Thiết kế chi tiết: [docs/DESIGN.md](docs/DESIGN.md).
+**GoViet** (*GoViet*): bộ gõ tiếng Việt Telex cho macOS. Phát triển bởi **Zenix Labs**.
+
+Không gạch chân, không lặp chữ. Thiết kế chi tiết: [docs/DESIGN.md](docs/DESIGN.md).
 
 ## Dựng và cài
 
@@ -13,12 +15,12 @@ Cần Swift toolchain (Command Line Tools là đủ), macOS 13 trở lên.
 
 ## Lần đầu chạy
 
-1. Mở **Gõ Việt**, cấp quyền **Trợ năng** trong System Settings (ứng dụng sẽ hướng dẫn).
+1. Mở **GoViet**, cấp quyền **Trợ năng** trong System Settings (ứng dụng sẽ hướng dẫn).
 2. Chuyển nguồn nhập của macOS về **ABC** và tắt bộ gõ tiếng Việt của Apple.
 3. Bấm **⌃ Space** để chuyển Việt/Anh (đổi được trong Cài đặt). Icon trên thanh menu: `V` / `E`.
 
 Bản build ký ad-hoc: mỗi lần dựng lại, macOS có thể yêu cầu cấp lại quyền Trợ năng
-(xoá mục Gõ Việt cũ trong danh sách rồi thêm lại).
+(xoá mục GoViet cũ trong danh sách rồi thêm lại).
 
 ## Khi một ứng dụng bị lặp hoặc mất chữ
 
@@ -53,5 +55,5 @@ mỗi dòng một mục `vn<Tab>Việt Nam`, `vn = Việt Nam`, `vn: Việt Nam`
 
 Mặc định không gõ tiếng Việt trong ô soạn code và terminal của VS Code, Cursor, Windsurf, Antigravity…
 (ô chat, ô tìm kiếm vẫn gõ được) và trong các ứng dụng terminal (Terminal, iTerm2, Warp, Ghostty…).
-Gõ Việt phải bật cây Accessibility của các trình soạn thảo này; để VS Code không tự chuyển sang chế độ
+GoViet phải bật cây Accessibility của các trình soạn thảo này; để VS Code không tự chuyển sang chế độ
 trình đọc màn hình, đặt `"editor.accessibilitySupport": "off"` trong cài đặt VS Code.

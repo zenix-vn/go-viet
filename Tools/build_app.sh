@@ -1,10 +1,10 @@
 #!/bin/zsh
-# Dựng "Gõ Việt.app" bằng SwiftPM (không cần Xcode).
+# Dựng "GoViet.app" bằng SwiftPM (không cần Xcode).
 # Dùng: Tools/build_app.sh [--install]
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
-APP="build/Gõ Việt.app"
+APP="build/GoViet.app"
 BUNDLE_ID="vn.goviet.GoViet"
 VERSION="0.1.0"
 
@@ -24,8 +24,8 @@ cat > "$APP/Contents/Info.plist" <<PLIST
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-    <key>CFBundleName</key><string>Gõ Việt</string>
-    <key>CFBundleDisplayName</key><string>Gõ Việt</string>
+    <key>CFBundleName</key><string>GoViet</string>
+    <key>CFBundleDisplayName</key><string>GoViet</string>
     <key>CFBundleIdentifier</key><string>$BUNDLE_ID</string>
     <key>CFBundleExecutable</key><string>GoViet</string>
     <key>CFBundleIconFile</key><string>AppIcon</string>
@@ -34,6 +34,7 @@ cat > "$APP/Contents/Info.plist" <<PLIST
     <key>CFBundleVersion</key><string>1</string>
     <key>LSMinimumSystemVersion</key><string>13.0</string>
     <key>LSUIElement</key><true/>
+    <key>NSHumanReadableCopyright</key><string>© 2026 Zenix Labs</string>
     <key>NSHighResolutionCapable</key><true/>
 </dict>
 </plist>
@@ -46,7 +47,8 @@ echo "Đã dựng: $APP"
 
 if [[ "${1:-}" == "--install" ]]; then
     pkill -x GoViet 2>/dev/null || true
-    rm -rf "/Applications/Gõ Việt.app"
+    rm -rf "/Applications/Gõ Việt.app"   # tên cũ
+    rm -rf "/Applications/GoViet.app"
     cp -R "$APP" "/Applications/"
     echo "Đã cài vào /Applications"
 fi

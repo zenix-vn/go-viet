@@ -9,6 +9,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
     private var statusItem: NSStatusItem!
     private var settingsWindow: NSWindow?
     private var permissionWindow: NSWindow?
+    private var aboutWindow: NSWindow?
     private var permissionTimer: Timer?
     private var hud: NSPanel?
     private var hudToken = 0
@@ -84,9 +85,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
 
     private func showPermissionWindow() {
         if permissionWindow == nil {
-            // Hiện hộp thoại hệ thống một lần để Gõ Việt xuất hiện sẵn trong danh sách Trợ năng
+            // Hiện hộp thoại hệ thống một lần để GoViet xuất hiện sẵn trong danh sách Trợ năng
             _ = AXIsProcessTrustedWithOptions([kAXTrustedCheckOptionPrompt.takeUnretainedValue() as String: true] as CFDictionary)
-            permissionWindow = makeWindow(title: "Gõ Việt", view: PermissionView())
+            permissionWindow = makeWindow(title: "GoViet", view: PermissionView())
         }
         present(permissionWindow)
     }
@@ -168,9 +169,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
         let letter = !running ? "!" : excluded ? "–" : (keyTap.isVietnamese ? "V" : "E")
         button.image = Self.statusImage(letter: letter, filled: vietnamese)
         button.title = ""
-        button.toolTip = !running ? "Gõ Việt: chưa có quyền Trợ năng"
-            : excluded ? "Gõ Việt: tắt ở ứng dụng này"
-            : (vietnamese ? "Gõ Việt: đang gõ tiếng Việt" : "Gõ Việt: đang gõ tiếng Anh")
+        button.toolTip = !running ? "GoViet: chưa có quyền Trợ năng"
+            : excluded ? "GoViet: tắt ở ứng dụng này"
+            : (vietnamese ? "GoViet: đang gõ tiếng Việt" : "GoViet: đang gõ tiếng Anh")
     }
 
     private static func statusImage(letter: String, filled: Bool) -> NSImage {
@@ -239,7 +240,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
         macro.target = self
         menu.addItem(.separator())
 
-        let ex = menu.addItem(withTitle: "Không dùng Gõ Việt ở \(appName)", action: #selector(toggleExclude), keyEquivalent: "")
+        let ex = menu.addItem(withTitle: "Không dùng GoViet ở \(appName)", action: #selector(toggleExclude), keyEquivalent: "")
         ex.state = settings.isExcluded(keyTap.frontBundleID) ? .on : .off
         ex.target = self
 
@@ -256,11 +257,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
         menu.addItem(strat)
         menu.addItem(.separator())
 
+        menu.addItem(withTitle: "Giới thiệu GoViet", action: #selector(openAbout), keyEquivalent: "").target = self
         menu.addItem(withTitle: "Cài đặt…", action: #selector(openSettings), keyEquivalent: ",").target = self
-        menu.addItem(withTitle: "Thoát Gõ Việt", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q")
+        menu.addItem(withTitle: "Thoát GoViet", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q")
     }
 
-    /// Tên ứng dụng mà Gõ Việt đang gõ vào (không phải chính Gõ Việt khi cửa sổ Cài đặt đang mở).
+    /// Tên ứng dụng mà GoViet đang gõ vào (không phải chính GoViet khi cửa sổ Cài đặt đang mở).
     private var frontAppName: String? {
         guard let id = keyTap.frontBundleID else { return nil }
         return NSRunningApplication.runningApplications(withBundleIdentifier: id).first?.localizedName
@@ -292,9 +294,16 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
         settings.updateRule(id, name: name) { $0.strategy = value }
     }
 
+    @objc private func openAbout() {
+        if aboutWindow == nil {
+            aboutWindow = makeWindow(title: "Giới thiệu GoViet", view: AboutView())
+        }
+        present(aboutWindow)
+    }
+
     @objc private func openSettings() {
         if settingsWindow == nil {
-            settingsWindow = makeWindow(title: "Cài đặt Gõ Việt", view: SettingsView())
+            settingsWindow = makeWindow(title: "Cài đặt GoViet", view: SettingsView())
         }
         present(settingsWindow)
     }
@@ -331,7 +340,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
     }
 
     private func updateActivationPolicy() {
-        let visible = [settingsWindow, permissionWindow].contains { $0?.isVisible == true }
+        let visible = [settingsWindow, permissionWindow, aboutWindow].contains { $0?.isVisible == true }
         NSApp.setActivationPolicy(visible ? .regular : .accessory)
     }
 }
